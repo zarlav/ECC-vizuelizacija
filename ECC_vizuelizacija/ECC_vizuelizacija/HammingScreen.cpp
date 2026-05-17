@@ -2,6 +2,7 @@
 #include "Hamming.h"
 #include <iostream>
 
+
 HammingScreen::HammingScreen()
 {
     backSpacePositions[0] = { (float)(2 + GetScreenWidth() / 3.5 - 5 - 20 * 2 - 20), 105.0 };
@@ -127,8 +128,6 @@ bool HammingScreen::DrawScene()
             bits = result.first;
             bitsStr = BitsToString(bits);
             Received = bitsStr;
-            for (int i : bits)
-                std::cout << i;
             error = result.second;
 
             if (error)

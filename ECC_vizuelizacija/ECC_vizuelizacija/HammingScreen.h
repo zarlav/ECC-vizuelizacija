@@ -2,6 +2,7 @@
 #include <string>
 #include <raylib.h>
 #include <vector>
+#include "Scene.h"
 class HammingScreen
 {
 public:
@@ -33,4 +34,7 @@ private:
 	float xPos;
 	float yPos;
 	Color ColorRadBtn = GRAY;
+protected:
+	//void UpdateLogic() override;
+	//void DrawSceneContent() override;
 };

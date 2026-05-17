@@ -109,6 +109,7 @@ void ParityScreen::ClearScene()
 
     errorButtonApplied = false;
     finished = false;
+    infoTexts.clear();
 }
 void ParityScreen::DrawParityScreen()
 {

@@ -9,13 +9,13 @@ std::vector<std::bitset<8>> LRC::send(std::vector<std::bitset<8>>& data)
 	int brojKolona = data[0].size();
 	int posLRC = brojKolona * brojRedova;
 
-	for (int i = 0,p= brojKolona-1; i < brojKolona; i++)
+	for (int i = 0; i < brojKolona; i++)
 	{
 		for (int j = 0, pos = 0; j < brojRedova; j++)
 		{
 			bitoviZaProveru.insert(bitoviZaProveru.begin(), data[j][i]);
 		}
-		LRC[p--] = calculateParity(bitoviZaProveru);
+		LRC[i] = calculateParity(bitoviZaProveru);
 		bitoviZaProveru.clear();
 	}
 	data.push_back(LRC);
@@ -31,10 +31,11 @@ std::pair<std::vector<std::bitset<8>>, bool> LRC::receive(std::vector<std::bitse
 	{
 		for (int j = 0; j < brojRedova; j++)
 		{
-			bitoviZaProveru.insert(bitoviZaProveru.begin(), data[i][j]);
+			bitoviZaProveru.insert(bitoviZaProveru.begin(), data[j][i]);
 		}
-		if (calculateParity(bitoviZaProveru) != data[i][brojRedova])
+		if (calculateParity(bitoviZaProveru) != data[brojRedova][i])
 			greska = true;
+		bitoviZaProveru.clear();
 	}
 	return { data, greska };
 }

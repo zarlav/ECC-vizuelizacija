@@ -2,7 +2,6 @@
 #include <string>
 #include <raylib.h>
 #include <vector>
-#include "Scene.h"
 class HammingScreen
 {
 public:

@@ -2,13 +2,14 @@
 #include <raylib.h>
 #include<vector>
 #include <string>
+#include "BaseScreen.h"
 enum RadioButton
 {
     EVEN_PARITY,
     ODD_PARITY,
     ERROR_SIM
 };
-class ParityScreen
+class ParityScreen : BaseScreen
 {
 public:
     ParityScreen();
@@ -45,6 +46,4 @@ private:
     Color ColorRadBtn1 = GRAY;
     Color ColorRadBtn2 = GRAY;
     Color ColorRadBtn3 = GRAY;
-    float xPos;
-    float yPos;
 };

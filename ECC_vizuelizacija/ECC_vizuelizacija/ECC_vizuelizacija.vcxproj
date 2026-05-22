@@ -140,7 +140,7 @@
     <ClCompile Include="ParityBit.cpp" />
     <ClCompile Include="ParityScreen.cpp" />
     <ClCompile Include="RepetitionCode.cpp" />
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="BaseScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
@@ -156,7 +156,7 @@
     <ClInclude Include="ParityBit.h" />
     <ClInclude Include="ParityScreen.h" />
     <ClInclude Include="RepetitionCode.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="BaseScreen.h" />
     <ClInclude Include="ScreenNavigation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

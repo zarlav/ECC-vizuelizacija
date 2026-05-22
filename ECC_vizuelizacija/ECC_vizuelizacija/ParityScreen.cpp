@@ -35,22 +35,7 @@ bool ParityScreen::DrawScene()
         bits = pb.send(bits, IsRadBtn1Active());
         bitsStr = BitsToString(bits);
     }
-    int h = GetScreenHeight();
-    int w = GetScreenWidth();
-
-    float x1 = w / 3 + 60;
-    float y1 = 80;
-
-    float x2 = 2 * w / 3 + 60;
-    float y2 = h - h / 3 + 60;
-
-    DrawRectangleLines(w / 3, 40, 120, 80, BLUE);
-    DrawText("Sender", w / 3 + 25, 70, 20, BLACK);
-
-    DrawRectangleLines(2 * w / 3, h - h / 3, 120, 80, GREEN);
-    DrawText("Receiver", 2 * w / 3 + 10, (h - h / 3) + 10, 20, BLACK);
-
-    DrawLine(x1, y1, x2, y2, GREEN);
+    BaseScreen::DrawStaticScene();
 
     if (IsRadBtn3Active() && !errorButtonApplied && yPos >= (y2-y1)/2 && xPos >= (x2-x1)/2)
     {
@@ -72,15 +57,7 @@ bool ParityScreen::DrawScene()
 
     if (!finished)
     {
-        float speed = 2.0f;
-
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-
-        float length = sqrt(dx * dx + dy * dy);
-
-        xPos += (dx / length) * speed;
-        yPos += (dy / length) * speed;
+        BaseScreen::AnimateCode();
 
         if (yPos >= y2)
         {
@@ -115,34 +92,11 @@ void ParityScreen::DrawParityScreen()
 {
     int width = GetScreenWidth();
     int height = GetScreenHeight();
-    int textWidth = MeasureText(Input.c_str(), 20);
-    DrawTriangle(navigateBackward[0], navigateBackward[1], navigateBackward[2], GREEN);
     DrawText("Parity Bit", width / 2 - MeasureText("Parity Bit", 40) / 2, 0, 40, GRAY);
-    DrawRectangleLines(0, 30, width / 3.5, height, GOLD);
-    DrawText("Parna parnost", 2, 30, 18, BLACK);
+    DrawScreen();
     DrawCircle((width / 3.5) - 20, 40, 10, ColorRadBtn1);
-    DrawText("Neparna parnost", 2, 60, 18, BLACK);
     DrawCircle((width / 3.5) - 20, 70, 10, ColorRadBtn2);
-    DrawText("Greska prenosa", 2, 90, 18, BLACK);
     DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn3);
-    DrawText("Ulazni podaci", 2, 120, 18, BLACK);
-    DrawRectangleLines(2, 140, width / 3.5 - 5, 30, BLACK);
-    DrawText(
-        Input.c_str(),
-        2 + (width / 3.5 - 5 - textWidth) / 2,
-        140 + (30 - 20) / 2,
-        20,
-        BLACK
-    );
-    DrawRectangleLines(40, 180, width / 3.5 - 80, 30, DARKGREEN);
-    DrawText("Testiraj", 40 + (width / 3.5 - 80) / 2 - MeasureText("Testiraj", 30) / 2, 180 + 30 / 2 - 30 / 2, 30, GREEN);
-    DrawRectangleLines(40, 220, width / 3.5 - 80, 30, RED);
-    DrawText("Resetuj", 40 + (width / 3.5 - 100) / 2 - MeasureText("Resetuj", 30) / 2, 220 + 30 / 2 - 30 / 2, 30, RED);
-    DrawTriangleLines(backSpacePositions[0], backSpacePositions[1], backSpacePositions[2], RED);
-    DrawRectangleLines(2 + width / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20, BLACK);
-    DrawText("0", 2 + (width / 3.5 - 5 - 20 * 2 - 5) + 20 / 2 - MeasureText("0", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
-    DrawRectangleLines(2 + width / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20, BLACK);
-    DrawText("1", 2 + (width / 3.5 - 5 - 20 - 2) + 20 / 2 - MeasureText("1", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
 }
 
 void ParityScreen::CheckRadioButton(RadioButton button)

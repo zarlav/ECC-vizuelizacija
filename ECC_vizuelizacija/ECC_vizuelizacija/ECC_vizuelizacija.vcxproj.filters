@@ -57,7 +57,7 @@
     <ClCompile Include="GolayScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="BaseScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,7 +104,7 @@
     <ClInclude Include="GolayScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="BaseScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

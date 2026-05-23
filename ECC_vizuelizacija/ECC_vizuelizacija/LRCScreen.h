@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 #include <raylib.h>
-class LRCScreen
+#include "BaseScreen.h"
+class LRCScreen : BaseScreen
 {
 public:
 	LRCScreen();
@@ -27,8 +28,6 @@ private:
 	std::string SimulatedBits;
 	std::string Input;
 	std::string Received;
-	float xPos;
-	float yPos;
 	bool radBtn = false;
 	bool finished;
 	bool errorButtonApplied = false;

@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "Button.h"
+#include "BaseScreen.h"
 #include "ParityBit.h"
 #include "ParityScreen.h"
 #include "HammingScreen.h"
@@ -19,6 +20,7 @@ int main()
 
     SetTargetFPS(60);
     
+    BaseScreen baseScreen;
     ParityScreen ps;
     HammingScreen hs;
     LRCScreen lrcs;
@@ -101,19 +103,19 @@ int main()
             {
                 currentScreen = Parity;
             }
-            if (CheckCollisionPointTriangle(mousePos, hs.navigateBackward[0], hs.navigateBackward[1], hs.navigateBackward[2]) && currentScreen != Menu)
+            if (CheckCollisionPointTriangle(mousePos, baseScreen.navigateBackward[0], baseScreen.navigateBackward[1], baseScreen.navigateBackward[2]) && currentScreen != Menu)
             {
                 currentScreen = Menu;
             }
 #pragma region LRC
-            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 130, screenWidth / 3.5 - 80, 30 }))
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
             {
                 if (lrcs.test)
                     lrcs.test = false;
                 else
                     lrcs.test = true;
             }
-            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 170, screenWidth / 3.5 - 80, 30 }))
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
             {
                 lrcs.ClearScene();
                 lrcs.reset = true;
@@ -122,28 +124,29 @@ int main()
             {
                 lrcs.CheckRadioButton();
             }
-            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 90 + 5, 20, 20 }))
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
             {
                 lrcs.CheckButton('0');
             }
-            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 90 + 5, 20, 20 }))
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
             {
                 lrcs.CheckButton('1');
             }
-            if (currentScreen == Lrc && CheckCollisionPointTriangle(mousePos, lrcs.backSpacePositions[0], lrcs.backSpacePositions[1], lrcs.backSpacePositions[2]))
+            if (currentScreen == Lrc && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
             {
                 lrcs.CheckButton('-');
             }
+            
 #pragma endregion LRC
 #pragma region Hamming
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 130, screenWidth / 3.5 - 80, 30 }))
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
             {
                 if (hs.test)
                     hs.test = false;
                 else
                     hs.test = true;
             }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 170, screenWidth / 3.5 - 80, 30 }))
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
             {
                 hs.ClearScene();
                 hs.reset = true;
@@ -152,15 +155,15 @@ int main()
             {
                 hs.CheckRadioButton();
             }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 90 + 5, 20, 20 }))
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
             {
                 hs.CheckButton('0');
             }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 90 + 5, 20, 20 }))
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
             {
                 hs.CheckButton('1');
             }
-            if (currentScreen == Hamming && CheckCollisionPointTriangle(mousePos, hs.backSpacePositions[0], hs.backSpacePositions[1], hs.backSpacePositions[2]))
+            if (currentScreen == Hamming && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
             {
                 hs.CheckButton('-');
             }
@@ -193,7 +196,7 @@ int main()
             {
                 ps.CheckButton('1');
             }
-            if (currentScreen == Parity && CheckCollisionPointTriangle(mousePos, ps.backSpacePositions[0], ps.backSpacePositions[1], ps.backSpacePositions[2]))
+            if (currentScreen == Parity && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
             {
                 ps.CheckButton('-');
             }

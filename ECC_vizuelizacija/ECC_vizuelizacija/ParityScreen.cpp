@@ -8,12 +8,6 @@
 
 ParityScreen::ParityScreen()
 {
-    backSpacePositions[0] = { (float)(2 + GetScreenWidth() / 3.5 - 5 - 20 * 2 - 20), 155.0 };
-    backSpacePositions[1] = { (float)(2 + GetScreenWidth() / 3.5 - 5 - 20 * 2 - 10), 147.0 };
-    backSpacePositions[2] = { (float)(2 + GetScreenWidth() / 3.5 - 5 - 20 * 2 - 10), 163.0 };
-    navigateBackward[0] = { 0,12.5 };
-    navigateBackward[1] = { 25,25 };
-    navigateBackward[2] = { 25,0 };
     ClearScene();
 }
 
@@ -87,13 +81,16 @@ void ParityScreen::ClearScene()
     errorButtonApplied = false;
     finished = false;
     infoTexts.clear();
+    Input.clear();
 }
 void ParityScreen::DrawParityScreen()
 {
     int width = GetScreenWidth();
     int height = GetScreenHeight();
+    int textWidth = MeasureText(Input.c_str(), 20);
     DrawText("Parity Bit", width / 2 - MeasureText("Parity Bit", 40) / 2, 0, 40, GRAY);
     DrawScreen();
+    DrawText(Input.c_str(), 2 + (width / 3.5 - 5 - textWidth) / 2, 140 + (30 - 20) / 2, 20, BLACK);
     DrawCircle((width / 3.5) - 20, 40, 10, ColorRadBtn1);
     DrawCircle((width / 3.5) - 20, 70, 10, ColorRadBtn2);
     DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn3);

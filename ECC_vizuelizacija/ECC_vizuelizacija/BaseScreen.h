@@ -14,10 +14,8 @@ public:
 
 	void DrawScreen();
 	void DrawInfoText();
-	void CheckInputButton(char bit);
 
 	int GetInputLength() const;
-	bool finished = false;
 	bool errorButtonApplied = false;
 	bool test = false;
 	bool reset = false;
@@ -29,8 +27,6 @@ protected:
 	std::vector<std::string> infoTexts;
 	std::string Input;
 	std::string SimulatedBits;
-	int height;
-	int width;
 	float xPos = 0;
 	float yPos = 0;
 	float x1;

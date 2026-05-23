@@ -2,7 +2,8 @@
 #include <string>
 #include <raylib.h>
 #include <vector>
-class HammingScreen
+#include "BaseScreen.h"
+class HammingScreen : BaseScreen
 {
 public:
 	HammingScreen();
@@ -19,8 +20,6 @@ public:
 	int GetInputLength();
 	std::vector<int> StringToBits(const std::string& input);
 	std::string BitsToString(const std::vector<int>& bits);
-	Vector2 backSpacePositions[3];
-	Vector2 navigateBackward[3];
 private:
 	std::vector<std::string> infoTexts;
 	std::string SimulatedBits;
@@ -30,10 +29,5 @@ private:
 	bool finished;
 	bool errorButtonApplied = false;
 	bool error = false;
-	float xPos;
-	float yPos;
 	Color ColorRadBtn = GRAY;
-protected:
-	//void UpdateLogic() override;
-	//void DrawSceneContent() override;
 };

@@ -9,10 +9,10 @@ BaseScreen::BaseScreen()
     navigateBackward[0] = { 0,12.5 };
     navigateBackward[1] = { 25,25 };
     navigateBackward[2] = { 25,0 };
-    float x1 = width / 3 + 60;
-    float y1 = 80;
-    float x2 = 2 * width / 3 + 60;
-    float y2 = height - height / 3 + 60;
+    x1 = GetScreenWidth() / 3 + 60;
+    y1 = 80;
+    x2 = 2 * GetScreenWidth() / 3 + 60;
+    y2 = GetScreenHeight() - GetScreenHeight() / 3 + 60;
 }
 
 BaseScreen::BaseScreen(std::vector<std::string>& infoTexts)
@@ -23,19 +23,18 @@ BaseScreen::BaseScreen(std::vector<std::string>& infoTexts)
 
 void BaseScreen::ClearScene()
 {
-    xPos = width / 3 + 60;
-    yPos = 80;
+    //xPos = width / 3 + 60;
+    //yPos = 80;
 
-    errorButtonApplied = false;
-    finished = false;
-    infoTexts.clear();
+    //errorButtonApplied = false;
+    //infoTexts.clear();
 }
 
 void BaseScreen::DrawScreen()
 {
     int width = GetScreenWidth();
     int height = GetScreenHeight();
-    int textWidth = MeasureText(Input.c_str(), 20);
+  //  int textWidth = MeasureText(Input.c_str(), 20);
     DrawTriangle(navigateBackward[0], navigateBackward[1], navigateBackward[2], GREEN);
    // DrawText("Parity Bit", width / 2 - MeasureText("Parity Bit", 40) / 2, 0, 40, GRAY);
     DrawRectangleLines(0, 30, width / 3.5, height, GOLD);
@@ -47,7 +46,7 @@ void BaseScreen::DrawScreen()
    // DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn3);
     DrawText("Ulazni podaci", 2, 120, 18, BLACK);
     DrawRectangleLines(2, 140, width / 3.5 - 5, 30, BLACK);
-    DrawText(Input.c_str(),2 + (width / 3.5 - 5 - textWidth) / 2,140 + (30 - 20) / 2,20,BLACK);
+ //   DrawText(Input.c_str(),2 + (width / 3.5 - 5 - textWidth) / 2,140 + (30 - 20) / 2,20,BLACK);
 
     DrawRectangleLines(40, 180, width / 3.5 - 80, 30, DARKGREEN);
     DrawText("Testiraj", 40 + (width / 3.5 - 80) / 2 - MeasureText("Testiraj", 30) / 2, 180 + 30 / 2 - 30 / 2, 30, GREEN);
@@ -60,18 +59,6 @@ void BaseScreen::DrawScreen()
     DrawText("1", 2 + (width / 3.5 - 5 - 20 - 2) + 20 / 2 - MeasureText("1", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
 }
 
-void BaseScreen::CheckInputButton(char bit)
-{
-    if (bit == '1' || bit == '0')
-    {
-        Input += bit;
-    }
-    else
-    {
-        if (!Input.empty())
-            Input.pop_back();
-    }
-}
 void BaseScreen::DrawStaticScene()
 {
     int width = GetScreenWidth();

@@ -154,7 +154,7 @@ std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 		return { data, false };
 }
 
-std::vector<int> Haming::introduceError(std::vector<int>& data)
+std::pair<std::vector<int>, int> Haming::introduceError(std::vector<int>& data)
 {
 	if (!data.empty())
 	{
@@ -163,6 +163,6 @@ std::vector<int> Haming::introduceError(std::vector<int>& data)
 		std::uniform_int_distribution<> distrib(1, data.size() - 1);
 		int rPos = distrib(gen);
 		data[rPos] ^= 1;
-		return data;
+		return { data, rPos };
 	}
 }

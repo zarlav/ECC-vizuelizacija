@@ -39,6 +39,7 @@ void HammingScreen::DrawHammingScreen()
 bool HammingScreen::DrawScene()
 {
     Haming haming;
+    std::pair<std::vector<int>, int> errorResult;
     std::pair<std::vector<int>, bool> result;
     std::vector<int> bits;
     std::string bitsStr;
@@ -53,20 +54,29 @@ bool HammingScreen::DrawScene()
 
     if (isRadBtnActive() && !errorButtonApplied && yPos >= (y2 - y1) / 2 && xPos >= (x2 - x1) / 2)
     {
-        bits = haming.introduceError(bits);
+        errorResult = haming.introduceError(bits);
+        errorPosition = errorResult.second;
+        bits = errorResult.first;
         bitsStr = BitsToString(bits);
         SimulatedBits = bitsStr;
-        std::cout << bitsStr << std::endl;
         errorButtonApplied = true;
     }
-
     if (errorButtonApplied)
-        DrawText(SimulatedBits.c_str(), xPos, yPos, 20, BLACK);
-    else
     {
+        for (int i = 0; i < SimulatedBits.size(); i++)
+        {
+            if (i != errorPosition)
+                DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, BLACK);
+            else
+            {
+                DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, RED);
+            }
+        }
+    }
+    else 
         if(!bitsStr.empty())
             DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
-    }
+
     if (!infoTexts.empty())
     {
         DrawText(infoTexts.back().c_str(), GetScreenWidth() / 3, GetScreenHeight() - GetScreenHeight() * 0.1, 30, RED);

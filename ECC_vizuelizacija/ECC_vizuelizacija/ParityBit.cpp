@@ -36,7 +36,7 @@ std::pair<std::vector<int>, bool> ParityBit::receive(const std::vector<int>& dat
 
 
 
-std::vector<int> ParityBit::introduceError(std::vector<int>& data)
+std::pair<std::vector<int>, int> ParityBit::introduceError(std::vector<int>& data)
 {
 	if (!data.empty())
 	{
@@ -45,6 +45,6 @@ std::vector<int> ParityBit::introduceError(std::vector<int>& data)
 		std::uniform_int_distribution<> distrib(0, data.size() - 2);
 		int rPos = distrib(gen);
 		data[rPos] ^= 1;
-		return data;
+		return { data, rPos };
 	}
 }

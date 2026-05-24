@@ -40,6 +40,7 @@ void LRCScreen::DrawLRCScreen()
 bool LRCScreen::DrawScene()
 {
 	LRC lrc;
+	std::pair < std::vector<std::bitset<8>>, int> errorResult;
 	std::pair<std::vector<std::bitset<8>>, bool> result;
 	std::vector<std::bitset<8>> parsed;
 	std::string bitsStr;
@@ -54,20 +55,29 @@ bool LRCScreen::DrawScene()
 	BaseScreen::DrawStaticScene();
 
 	if (isRadBtnActive() && !errorButtonApplied && yPos >= (y2 - y1) / 2 && xPos >= (x2 - x1) / 2)
-	{
-		parsed = lrc.introduceError(parsed);
+	{	
+		errorResult = lrc.introduceError(parsed);
+		errorPosition = errorResult.second;
+		parsed = result.first;
 		bitsStr = bitsToString(parsed);
 		SimulatedBits = bitsStr;
-		std::cout << bitsStr << std::endl;
 		errorButtonApplied = true;
 	}
 	if (errorButtonApplied)
-		DrawText(SimulatedBits.c_str(), xPos, yPos, 20, BLACK);
-	else
 	{
-		if (!bitsStr.empty())
-			DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
+		for (int i = 0; i < SimulatedBits.size(); i++)
+		{
+			if (i != errorPosition)
+				DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, BLACK);
+			else
+			{
+				DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, RED);
+			}
+		}
 	}
+	if (!errorButtonApplied && !bitsStr.empty())
+		DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
+
 	if (!infoTexts.empty())
 	{
 		DrawText(infoTexts.back().c_str(), GetScreenWidth() / 3, GetScreenHeight() - GetScreenHeight() * 0.1, 30, RED);

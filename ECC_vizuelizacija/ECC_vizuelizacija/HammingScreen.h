@@ -21,6 +21,7 @@ public:
 	std::vector<int> StringToBits(const std::string& input);
 	std::string BitsToString(const std::vector<int>& bits);
 private:
+	int errorPosition;
 	std::vector<std::string> infoTexts;
 	std::string SimulatedBits;
 	std::string Input;

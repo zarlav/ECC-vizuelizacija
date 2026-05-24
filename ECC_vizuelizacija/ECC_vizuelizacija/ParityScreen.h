@@ -35,6 +35,7 @@ public:
     Vector2 navigateBackward[3];
 
 private:
+    int errorPosition;
     std::vector<std::string> infoTexts;
     std::string Input;
     std::string SimulatedBits;

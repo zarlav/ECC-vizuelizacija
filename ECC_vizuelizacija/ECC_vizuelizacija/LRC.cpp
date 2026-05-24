@@ -51,7 +51,7 @@ int LRC::calculateParity(std::vector<int>& data)
 	return (cnt % 2) == 0 ? 0 : 1;
 }
 
-std::vector<std::bitset<8>> LRC::introduceError(std::vector<std::bitset<8>>& data)
+std::pair<std::vector<std::bitset<8>>, int> LRC::introduceError(std::vector<std::bitset<8>>&data)
 {
 	if (!data.empty())
 	{
@@ -60,6 +60,6 @@ std::vector<std::bitset<8>> LRC::introduceError(std::vector<std::bitset<8>>& dat
 		std::uniform_int_distribution<> distrib(0, data.size() - 2);
 		int rPos = distrib(gen);
 		data[rPos] ^= 1;
-		return data;
+		return { data, rPos };
 	}
 }

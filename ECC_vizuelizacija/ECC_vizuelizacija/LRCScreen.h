@@ -24,6 +24,7 @@ public:
 	std::vector<std::bitset<8>> parseLRC(const std::string& input);
 	std::string bitsToString(const std::vector<std::bitset<8>>& data);
 private:
+	int errorPosition;
 	std::vector<std::string> infoTexts;
 	std::string SimulatedBits;
 	std::string Input;

@@ -20,6 +20,7 @@ bool ParityScreen::DrawScene()
 {
     ParityBit pb;
     std::pair<std::vector<int>, bool> result;
+    std::pair<std::vector<int>, int> ErrorResult;
     std::vector<int> bits;
     std::string bitsStr;
 
@@ -33,17 +34,30 @@ bool ParityScreen::DrawScene()
 
     if (IsRadBtn3Active() && !errorButtonApplied && yPos >= (y2-y1)/2 && xPos >= (x2-x1)/2)
     {
-        bits = pb.introduceError(bits);
+        ErrorResult = pb.introduceError(bits);
+        errorPosition = ErrorResult.second;
+        bits = ErrorResult.first;
         bitsStr = BitsToString(bits);
         SimulatedBits = bitsStr;
         std::cout << bitsStr << std::endl;
         errorButtonApplied = true;
-    }
 
-    if(errorButtonApplied)
-        DrawText(SimulatedBits.c_str(), xPos, yPos, 20, BLACK);
+    }
+    if (errorButtonApplied)
+    {
+        for (int i = 0; i < SimulatedBits.size(); i++)
+        {
+            if (i != errorPosition)
+                DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, BLACK);
+            else
+            {
+                DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, RED);
+            }
+        }
+    }
     else
         DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
+
     if (!infoTexts.empty())
     {
         DrawText(infoTexts.back().c_str(), GetScreenWidth() / 3, GetScreenHeight() - GetScreenHeight() * 0.1, 30, RED);

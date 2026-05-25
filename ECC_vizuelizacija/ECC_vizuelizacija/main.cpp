@@ -11,6 +11,7 @@
 #include "ScreenNavigation.h"
 #include "Hamming.h"
 #include "LRC.h"
+#include "CRC.h"
 int main()
 {
     const int screenWidth = 1080;
@@ -21,6 +22,9 @@ int main()
     SetTargetFPS(60);
     
     BaseScreen baseScreen;
+    CRC crc;
+    std::vector<int> data = { 1,0,0,1,1,0,0 };
+    crc.send(data);
     ParityScreen ps;
     HammingScreen hs;
     LRCScreen lrcs;

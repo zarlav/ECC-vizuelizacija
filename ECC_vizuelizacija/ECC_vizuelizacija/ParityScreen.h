@@ -31,8 +31,6 @@ public:
     int GetInfoTextLenght();
     std::vector<int> StringToBits(const std::string& input);
     std::string BitsToString(const std::vector<int>& bits);
-    Vector2 backSpacePositions[3];
-    Vector2 navigateBackward[3];
 
 private:
     int errorPosition;

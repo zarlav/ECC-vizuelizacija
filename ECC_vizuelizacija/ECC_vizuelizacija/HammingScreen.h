@@ -18,8 +18,6 @@ public:
 	void CheckButton(char bit);
 	void DrawInfoText();
 	int GetInputLength();
-	std::vector<int> StringToBits(const std::string& input);
-	std::string BitsToString(const std::vector<int>& bits);
 private:
 	int errorPosition;
 	std::vector<std::string> infoTexts;

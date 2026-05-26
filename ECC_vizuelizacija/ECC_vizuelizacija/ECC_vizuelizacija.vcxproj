@@ -126,6 +126,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitUtils.cpp" />
+    <ClCompile Include="BitUtils.h" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ClientRect.cpp" />
     <ClCompile Include="CRC.cpp" />

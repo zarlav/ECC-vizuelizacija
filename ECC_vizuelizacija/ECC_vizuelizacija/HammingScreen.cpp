@@ -1,7 +1,7 @@
 #include "HammingScreen.h"
 #include "Hamming.h"
 #include <iostream>
-
+#include "BitUtils.h"
 
 HammingScreen::HammingScreen()
 {
@@ -44,11 +44,11 @@ bool HammingScreen::DrawScene()
     std::vector<int> bits;
     std::string bitsStr;
 
-    bits = StringToBits(Input);
+    bits = BitUtils::StringToBits(Input);
     if (!errorButtonApplied && !finished)
     {
         bits = haming.send(bits);
-        bitsStr = BitsToString(bits);
+        bitsStr = BitUtils::BitsToString(bits);
     }
     BaseScreen::DrawStaticScene();
 
@@ -57,7 +57,7 @@ bool HammingScreen::DrawScene()
         errorResult = haming.introduceError(bits);
         errorPosition = errorResult.second;
         bits = errorResult.first;
-        bitsStr = BitsToString(bits);
+        bitsStr = BitUtils::BitsToString(bits);
         SimulatedBits = bitsStr;
         errorButtonApplied = true;
     }
@@ -90,7 +90,7 @@ bool HammingScreen::DrawScene()
         {
             result = haming.receive(bits);
             bits = result.first;
-            bitsStr = BitsToString(bits);
+            bitsStr = BitUtils::BitsToString(bits);
             Received = bitsStr;
             error = result.second;
 
@@ -140,26 +140,26 @@ void HammingScreen::CheckRadioButton()
 		radBtn = false;
 	}
 }
-std::vector<int> HammingScreen::StringToBits(const std::string& input)
-{
-    std::vector<int> bits;
-
-    int i = 0;
-    while (i < input.size())
-    {
-        bits.push_back(input[i] - '0');
-        i++;
-    }
-    return bits;
-}
-std::string HammingScreen::BitsToString(const std::vector<int>& bits)
-{
-    std::string text;
-    for (int bit : bits)
-        text += std::to_string(bit);
-
-    return text;
-}
+//std::vector<int> HammingScreen::StringToBits(const std::string& input)
+//{
+//    std::vector<int> bits;
+//
+//    int i = 0;
+//    while (i < input.size())
+//    {
+//        bits.push_back(input[i] - '0');
+//        i++;
+//    }
+//    return bits;
+//}
+//std::string HammingScreen::BitsToString(const std::vector<int>& bits)
+//{
+//    std::string text;
+//    for (int bit : bits)
+//        text += std::to_string(bit);
+//
+//    return text;
+//}
 
 int HammingScreen::GetInputLength()
 {

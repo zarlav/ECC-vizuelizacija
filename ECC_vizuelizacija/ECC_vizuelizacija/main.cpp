@@ -8,6 +8,7 @@
 #include "ParityScreen.h"
 #include "HammingScreen.h"
 #include "LRCScreen.h"
+#include "CRCScreen.h"
 #include "ScreenNavigation.h"
 #include "Hamming.h"
 #include "LRC.h"
@@ -22,12 +23,10 @@ int main()
     SetTargetFPS(60);
     
     BaseScreen baseScreen;
-    CRC crc;
-    std::vector<int> data = { 1,0,0,1,1,0,0 };
-    crc.send(data);
     ParityScreen ps;
     HammingScreen hs;
     LRCScreen lrcs;
+    CRCscreen crcs;
     ScreenNavigation currentScreen = Menu;
     Rectangle recCRCBttn = { screenWidth/2 - 100,120, 200, 50 };
     Rectangle recParityBttn = { screenWidth / 2 - 100, 170, 200, 50 };
@@ -79,6 +78,11 @@ int main()
             }
             break;
         case Crc:
+            crcs.DrawCRCscreen();
+            if (crcs.test && !crcs.reset)
+            {
+                crcs.DrawScene();
+            }
             break;
         case Golay:
             break;
@@ -111,6 +115,36 @@ int main()
             {
                 currentScreen = Menu;
             }
+#pragma region CRC
+            if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
+            {
+                if (crcs.test)
+                    crcs.test = false;
+                else
+                    crcs.test = true;
+            }
+            if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
+            {
+                crcs.ClearScene();
+                crcs.reset = true;
+            }
+            if (currentScreen == Crc && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 100 }, 10.0))
+            {
+                crcs.CheckRadioButton();
+            }
+            if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
+            {
+                crcs.CheckButton('0');
+            }
+            if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
+            {
+                crcs.CheckButton('1');
+            }
+            if (currentScreen == Crc && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
+            {
+                crcs.CheckButton('-');
+            }
+#pragma endregion CRC
 #pragma region LRC
             if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
             {

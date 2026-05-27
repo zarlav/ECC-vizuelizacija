@@ -14,11 +14,14 @@ public:
 
 	void DrawScreen();
 	void DrawInfoText();
+	void ShowSenderInfo();
+	void ShowReceiverInfo();
 
 	int GetInputLength() const;
 	bool errorButtonApplied = false;
 	bool test = false;
 	bool reset = false;
+	bool pause = false;
 
 	Vector2 backSpacePositions[3];
 	Vector2 navigateBackward[3];

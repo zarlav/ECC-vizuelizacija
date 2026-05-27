@@ -8,7 +8,7 @@ std::vector<int> CRC::send(std::vector<int>& data)
 	int n = generator.size() - 1;
 	for (int i = 0; i < n; i++)
 		data.push_back(0);
-	ostatak = xorDivision(data);
+	ostatak = xorDivision(data, true);
 	data.erase(data.end() - ostatak.size(), data.end());
 	data.insert(data.end(), ostatak.begin(), ostatak.end());
 	return data;
@@ -16,7 +16,7 @@ std::vector<int> CRC::send(std::vector<int>& data)
 
 }
 
-std::vector<int> CRC::xorDivision(std::vector<int>& bits)
+std::vector<int> CRC::xorDivision(std::vector<int>& bits, bool sender)
 {
 	std::vector<int> deljenik;
 	std::vector<int> result;
@@ -45,6 +45,10 @@ std::vector<int> CRC::xorDivision(std::vector<int>& bits)
 				steps.push_back(BitUtils::BitsToString(result)); // spustanje sledeceg bita iz data
 				pos++;
 			}
+			if(result.size() == generator.size() && result[1] == 0)
+				steps.push_back(std::string(generator.size(), '0'));
+			else
+				steps.push_back(BitUtils::BitsToString(generator));
 			i++;
 		}
 		else
@@ -61,20 +65,32 @@ std::vector<int> CRC::xorDivision(std::vector<int>& bits)
 	result = deljenik;
 	result.erase(result.begin());
 	steps.push_back(BitUtils::BitsToString(result));
+	if (sender)
+		stepsSender = steps;
+	else
+		stepsReceiver = steps;
 	return result;
 }
-std::vector<std::string> CRC::getSteps()
+std::vector<std::string> CRC::getStepSender()
 {
-	return steps;
+	return stepsSender;
+}
+std::vector<std::string> CRC::getStepReceiver()
+{
+	return stepsReceiver;
 }
 int CRC::getGeneratorSize()
 {
 	return generator.size();
 }
+std::vector<int> CRC::getGenerator()
+{
+	return generator;
+}
 CRCresult CRC::receive(std::vector<int>& bits)
 {
 	CRCresult result;
-	std::vector<int> ostatak = xorDivision(bits);
+	std::vector<int> ostatak = xorDivision(bits, false);
 	bool sveNule = std::count(ostatak.begin(), ostatak.end(), 1) == 0;
 	result.data = bits;
 	result.remainder = ostatak;

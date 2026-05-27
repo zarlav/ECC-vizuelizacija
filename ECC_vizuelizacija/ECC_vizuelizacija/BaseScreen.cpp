@@ -11,8 +11,8 @@ BaseScreen::BaseScreen()
     navigateBackward[2] = { 25,0 };
     x1 = GetScreenWidth() / 3 + 60;
     y1 = 80;
-    x2 = 2 * GetScreenWidth() / 3 + 60;
-    y2 = GetScreenHeight() - GetScreenHeight() / 3 + 60;
+    x2 = GetScreenWidth() / 3 + 60;
+    y2 = GetScreenHeight() - GetScreenHeight() / 3 + 30;
 }
 
 BaseScreen::BaseScreen(std::vector<std::string>& infoTexts)
@@ -59,14 +59,33 @@ void BaseScreen::DrawScreen()
     DrawText("1", 2 + (width / 3.5 - 5 - 20 - 2) + 20 / 2 - MeasureText("1", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
 }
 
+void BaseScreen::ShowSenderInfo()
+{
+    int width = GetScreenWidth();
+    int height = GetScreenHeight();
+    DrawRectangleRec(Rectangle{ (float)width / 3 + 125,40, (float)width / 3 + 225, 240 }, SVETLOZELENA);
+
+}
+
+void BaseScreen::ShowReceiverInfo()
+{
+    int width = GetScreenWidth();
+    int height = GetScreenHeight();
+    DrawRectangleRec(Rectangle{ (float)width / 3 + 125,(float)height - height / 3, (float)width / 3 + 225, (float)height - height / 3 - 200 }, SVETLOZELENA);
+}
+
 void BaseScreen::DrawStaticScene()
 {
     int width = GetScreenWidth();
     int height = GetScreenHeight();
     DrawRectangleLines(width / 3, 40, 120, 80, BLUE);
+    DrawRectangleLines(width / 3 + 120 - 25, 40 + 5, 20, 20, BLACK);
+    DrawText("?", width / 3 + 120 - 19, 40 + 7, 16, BLACK);
     DrawText("Sender", width / 3 + 25, 70, 20, BLACK);
-    DrawRectangleLines(2 * width / 3, height - height / 3, 120, 80, GREEN);
-    DrawText("Receiver", 2 * width / 3 + 10, (height - height / 3) + 10, 20, BLACK);
+    DrawRectangleLines( width / 3, height - height / 3, 120, 80, GREEN);
+    DrawRectangleLines(width / 3 + 120 - 25, height - height / 3 + 5, 20, 20, BLACK);
+    DrawText("?", width / 3 + 120 - 19, height - height / 3 + 7, 16, BLACK);
+    DrawText("Receiver", width / 3 + 15, (height - height / 3) + 50, 20, BLACK);
 
     DrawLine(x1, y1, x2, y2, GREEN);
 }

@@ -144,6 +144,20 @@ int main()
             {
                 crcs.CheckButton('-');
             }
+            if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
+            {
+                if (crcs.senderInfoBtn)
+                    crcs.senderInfoBtn = false;
+                else
+                    crcs.senderInfoBtn = true;
+            }
+            if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
+            {
+                if (crcs.receiverInfoBtn)
+                    crcs.receiverInfoBtn = false;
+                else
+                    crcs.receiverInfoBtn = true;
+            }
 #pragma endregion CRC
 #pragma region LRC
             if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))

@@ -12,10 +12,15 @@ public:
 	void DrawCRCscreen();
 	void CheckButton(char bit);
 	void CheckRadioButton();
-	void DrawSteps();
+	void DrawSendersSteps();
+	void DrawReceiversSteps();
+	void DrawSenderInfo();
+	void DrawReceiverInfo();
 	bool test = false;
 	bool reset = false;
 	bool stepsDrawn = false;
+	bool senderInfoBtn = false;
+	bool receiverInfoBtn = false;
 private:
 	int errorPosition;
 	std::vector<std::string> infoTexts;
@@ -27,6 +32,8 @@ private:
 	bool finished;
 	bool errorButtonApplied = false;
 	bool error = false;
+
 	Color ColorRadBtn = GRAY;
 	CRC crc;
+	Font mono;
 };

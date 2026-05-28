@@ -263,6 +263,20 @@ int main()
                 else
                     ps.test = false;
             }
+            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
+            {
+                if (ps.senderInfoBtn)
+                    ps.senderInfoBtn = false;
+                else
+                    ps.senderInfoBtn = true;
+            }
+            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
+            {
+                if (ps.receiverInfoBtn)
+                    ps.receiverInfoBtn = false;
+                else
+                    ps.receiverInfoBtn = true;
+            }
 #pragma endregion Parity
         }
         EndDrawing();

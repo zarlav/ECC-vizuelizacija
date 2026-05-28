@@ -101,10 +101,10 @@ bool CRCscreen::DrawScene()
 	{
 		DrawReceiversSteps();
 		DrawText(Received.c_str(), xPos, yPos, 20, BLACK);
-		if (receiverInfoBtn)
-			ShowReceiverInfo();
-		if (senderInfoBtn)
-			ShowSenderInfo();
+		//if (receiverInfoBtn)
+		//	ShowReceiverInfo();
+		//if (senderInfoBtn)
+		//	ShowSenderInfo();
 	}
 	return finished;
 
@@ -198,12 +198,12 @@ void CRCscreen::DrawReceiversSteps()
 
 void CRCscreen::DrawSenderInfo()
 {
-	ShowSenderInfo();
+	//ShowSenderInfo();
 }
 
 void CRCscreen::DrawReceiverInfo()
 {
-	ShowReceiverInfo();
+	//ShowReceiverInfo();
 }
 
 void CRCscreen::CheckButton(char bit)

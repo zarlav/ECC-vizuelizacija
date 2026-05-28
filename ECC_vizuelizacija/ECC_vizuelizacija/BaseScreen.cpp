@@ -59,19 +59,65 @@ void BaseScreen::DrawScreen()
     DrawText("1", 2 + (width / 3.5 - 5 - 20 - 2) + 20 / 2 - MeasureText("1", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
 }
 
-void BaseScreen::ShowSenderInfo()
+void BaseScreen::ShowSenderInfo(std::string info)
 {
     int width = GetScreenWidth();
-    int height = GetScreenHeight();
-    DrawRectangleRec(Rectangle{ (float)width / 3 + 125,40, (float)width / 3 + 225, 240 }, SVETLOZELENA);
 
+    Rectangle box = {
+        (float)width / 3 + 125,
+        40,
+        float(width)- ((float)width / 3 + 125) - 20,
+        180
+    };
+    DrawRectangleRec(box, SVETLOZELENA);
+    DrawRectangleLinesEx(box, 2, DARKGREEN);
+    DrawText("INFO", box.x + 10, box.y + 10, 24, DARKGREEN);
+    DrawLine(
+        box.x + 10,
+        box.y + 40,
+        box.x + box.width - 10,
+        box.y + 40,
+        DARKGREEN
+    );
+    DrawText(
+        info.c_str(),
+        box.x + 10,
+        box.y + 55,
+        20,
+        BLACK
+    );
 }
 
-void BaseScreen::ShowReceiverInfo()
+void BaseScreen::ShowReceiverInfo(std::string info)
 {
     int width = GetScreenWidth();
     int height = GetScreenHeight();
-    DrawRectangleRec(Rectangle{ (float)width / 3 + 125,(float)height - height / 3, (float)width / 3 + 225, (float)height - height / 3 - 200 }, SVETLOZELENA);
+
+    Rectangle box = {
+        (float)width / 3 + 125,
+        (float)height - height / 3 - 100,
+        (float)width - ((float)width / 3 + 125),
+        180
+    };
+
+    DrawRectangleRec(box, SVETLOZELENA);
+    DrawRectangleLinesEx(box, 2, DARKGREEN);
+    DrawText("INFO", box.x + 10, box.y + 10, 24, DARKGREEN);
+    DrawLine(
+        box.x + 10,
+        box.y + 40,
+        box.x + box.width - 10,
+        box.y + 40,
+        DARKGREEN
+    );
+
+    DrawText(
+        info.c_str(),
+        box.x + 10,
+        box.y + 55,
+        20,
+        BLACK
+    );
 }
 
 void BaseScreen::DrawStaticScene()

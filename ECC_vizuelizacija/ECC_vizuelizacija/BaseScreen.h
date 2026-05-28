@@ -14,8 +14,8 @@ public:
 
 	void DrawScreen();
 	void DrawInfoText();
-	void ShowSenderInfo();
-	void ShowReceiverInfo();
+	void ShowSenderInfo(std::string info);
+	void ShowReceiverInfo(std::string info);
 
 	int GetInputLength() const;
 	bool errorButtonApplied = false;

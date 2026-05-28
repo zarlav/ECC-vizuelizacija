@@ -5,9 +5,11 @@
 #include <vector>
 #include <string>
 #include "HammingScreen.h"
+#include "BitUtils.h"
 
 ParityScreen::ParityScreen()
 {
+    this->font = LoadFont("resources/JetBrainsMono-SemiBoldItalic.ttf");
     ClearScene();
 }
 
@@ -18,17 +20,17 @@ ParityScreen::ParityScreen(std::vector<std::string>& infoTexts)
 }
 bool ParityScreen::DrawScene()
 {
-    ParityBit pb;
     std::pair<std::vector<int>, bool> result;
     std::pair<std::vector<int>, int> ErrorResult;
     std::vector<int> bits;
     std::string bitsStr;
 
-    bits = StringToBits(Input);
+    bits = BitUtils::StringToBits(Input);
     if (!errorButtonApplied)
     {
         bits = pb.send(bits, IsRadBtn1Active());
-        bitsStr = BitsToString(bits);
+        bitsStr = BitUtils::BitsToString(bits);
+        SimulatedBits = bitsStr;
     }
     BaseScreen::DrawStaticScene();
 
@@ -37,7 +39,7 @@ bool ParityScreen::DrawScene()
         ErrorResult = pb.introduceError(bits);
         errorPosition = ErrorResult.second;
         bits = ErrorResult.first;
-        bitsStr = BitsToString(bits);
+        bitsStr = BitUtils::BitsToString(bits);
         SimulatedBits = bitsStr;
         std::cout << bitsStr << std::endl;
         errorButtonApplied = true;
@@ -48,20 +50,15 @@ bool ParityScreen::DrawScene()
         for (int i = 0; i < SimulatedBits.size(); i++)
         {
             if (i != errorPosition)
-                DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, BLACK);
+                DrawTextEx(font, std::string(1, SimulatedBits[i]).c_str(), { xPos + i * 12, yPos }, 20, 1,BLACK);
             else
             {
-                DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, RED);
+                DrawTextEx(font, std::string(1, SimulatedBits[i]).c_str(), { xPos + i * 12, yPos }, 20,1, RED);
             }
         }
     }
     else
         DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
-
-    if (!infoTexts.empty())
-    {
-        DrawText(infoTexts.back().c_str(), GetScreenWidth() / 3, GetScreenHeight() - GetScreenHeight() * 0.1, 30, RED);
-    }
 
     if (!finished)
     {
@@ -73,13 +70,15 @@ bool ParityScreen::DrawScene()
             bits = result.first;
             error = result.second;
 
-            if (error)
-            {
-                infoTexts.push_back("Detektovana greska pri prenosu podatka!");
-            }
-
             finished = true;
         }
+    }
+    if (finished)
+    {
+        if (receiverInfoBtn)
+	        DrawReceiverInfo();
+        if (senderInfoBtn)
+            DrawSenderInfo();
     }
 
     return finished;
@@ -141,7 +140,6 @@ void ParityScreen::CheckRadioButton(RadioButton button)
     case ERROR_SIM:
         if (radBtn3 == false)
         {
-            //infoTexts.push_back("Simulacija greske na jednom bitu");
             showInfo = true;
             radBtn3 = true;
             ColorRadBtn3 = GREEN;
@@ -205,6 +203,43 @@ bool ParityScreen::IsRadBtn3Active() const
     else
         return false;
 }
+void ParityScreen::DrawSenderInfo()
+{
+    std::string parnost;
+    int brojJedinica = std::count(Input.begin(), Input.end(), '1');
+    if (IsRadBtn1Active())
+        parnost = "parna paran";
+    else
+        parnost = "neparna neparan";
+    std::string inf = "Kada je " + parnost.substr(0, parnost.find(' ')) + " parnost, tada broj jedinica u \npodatku mora biti " +
+        parnost.substr(parnost.find(' ') + 1)+".\n";
+    inf += " Ulazni podatak " + Input + ", ima " + std::to_string(brojJedinica )+ " jedinica.\n";
+    if (brojJedinica % 2 == 0)
+        if (IsRadBtn1Active())
+            inf += " Posto je broj jedinica paran, na kraju podatka\n se dodaje parity bit 0\n";
+        else
+            inf += " Posto je broj jedinica paran, na kraju podatka\n se dodaje parity bit 1\n";
+    else
+        if(IsRadBtn2Active())
+            inf += " Posto je broj jedinica neparan, na kraju podatka\n se dodaje parity bit 0\n";
+        else
+            inf += " Posto je broj jedinica neparan, na kraju podatka\n se dodaje parity bit 1\n";
+
+    ShowSenderInfo(inf);
+}
+void ParityScreen::DrawReceiverInfo()
+{
+    std::string inf;
+    int brojJedinica = std::count(SimulatedBits.begin(), SimulatedBits.end(), '1');
+    if (error)
+        inf = "Detektovana je GRESKA u podatku!\nParity bit ne zna da ispravi gresku.\n";
+    if (IsRadBtn1Active())
+        inf += "Proverava se da li je broj jedinica paran\n ukljucujuci i parity bit.\nU podatku "+ SimulatedBits+ " ima "+ std::to_string(brojJedinica) + " jedinica.\n";
+    else
+        inf += "Proverava se da li je broj jedinica neparan\ ukljucujuci i parity bit.\nU podatku " + SimulatedBits + " ima " + std::to_string(brojJedinica) + " jedinica.\n";
+
+    ShowReceiverInfo(inf);
+}
 
 int ParityScreen::GetInputLength()
 {
@@ -215,26 +250,3 @@ int ParityScreen::GetInfoTextLenght()
 {
     return infoTexts.size();
 }
-
-std::vector<int> ParityScreen::StringToBits(const std::string& input)
-{
-    std::vector<int> bits;
-
-    int i = 0;
-    while (i < input.size())
-    {
-        bits.push_back(input[i] - '0');
-        i++;
-    }
-    return bits;
-}
-
-std::string ParityScreen::BitsToString(const std::vector<int>& bits)
-{
-    std::string text;
-    for (int bit : bits)
-        text += std::to_string(bit);
-
-    return text;
-}
-

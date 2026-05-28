@@ -3,6 +3,7 @@
 #include<vector>
 #include <string>
 #include "BaseScreen.h"
+#include "ParityBit.h"
 enum RadioButton
 {
     EVEN_PARITY,
@@ -23,14 +24,16 @@ public:
     bool IsRadBtn1Active() const;
     bool IsRadBtn2Active() const;
     bool IsRadBtn3Active() const;
+    void DrawSenderInfo();
+    void DrawReceiverInfo();
     bool finished;
     bool errorButtonApplied = false;
     bool test = false;
     bool reset = false;
     int GetInputLength();
     int GetInfoTextLenght();
-    std::vector<int> StringToBits(const std::string& input);
-    std::string BitsToString(const std::vector<int>& bits);
+    bool senderInfoBtn = false;
+    bool receiverInfoBtn = false;
 
 private:
     int errorPosition;
@@ -45,4 +48,6 @@ private:
     Color ColorRadBtn1 = GRAY;
     Color ColorRadBtn2 = GRAY;
     Color ColorRadBtn3 = GRAY;
+    ParityBit pb;
+    Font font;
 };

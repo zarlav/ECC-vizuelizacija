@@ -16,11 +16,14 @@ public:
 	void DrawReceiversSteps();
 	void DrawSenderInfo();
 	void DrawReceiverInfo();
+	void DrawBitDown(float posx1, float posy1, float posx2, float posy2);
+	std::vector<int> prepareBits();
 	bool test = false;
 	bool reset = false;
 	bool stepsDrawn = false;
 	bool senderInfoBtn = false;
 	bool receiverInfoBtn = false;
+	bool canSend = false;
 private:
 	int errorPosition;
 	std::vector<std::string> infoTexts;
@@ -28,6 +31,7 @@ private:
 	std::string Input;
 	std::string Received;
 	std::string Remainder;
+	std::string SentData;
 	bool radBtn = false;
 	bool finished;
 	bool errorButtonApplied = false;

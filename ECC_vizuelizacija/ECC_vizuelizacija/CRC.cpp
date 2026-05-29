@@ -30,8 +30,9 @@ std::vector<int> CRC::xorDivision(std::vector<int>& bits, bool sender)
 	{
 		for (int j = 0; j < generator.size(); j++)
 		{
-			result.push_back(deljenik[j] ^ generator[j]); 
+			result.push_back(deljenik[j] ^ generator[j]);
 		}
+		
 		steps.push_back(BitUtils::BitsToString(result));
 		if (result[1] == 0)  // rezultat pocinje sa 2 nule
 		{
@@ -41,11 +42,14 @@ std::vector<int> CRC::xorDivision(std::vector<int>& bits, bool sender)
 					steps.push_back(std::string(generator.size(), '0')); // nule
 				result.erase(result.begin());
 				steps.push_back(BitUtils::BitsToString(result));  // brisanje nule
-				result.push_back(bits[pos]);
+				if (pos < bits.size())
+				{
+					result.push_back(bits[pos]);
+					pos++;
+				}
 				steps.push_back(BitUtils::BitsToString(result)); // spustanje sledeceg bita iz data
-				pos++;
 			}
-			if(result.size() == generator.size() && result[1] == 0)
+			if(result.size() == generator.size() && (result[1] == 0 || result[0] == 0))
 				steps.push_back(std::string(generator.size(), '0'));
 			else
 				steps.push_back(BitUtils::BitsToString(generator));

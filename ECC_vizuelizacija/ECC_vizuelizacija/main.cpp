@@ -15,10 +15,12 @@
 #include "CRC.h"
 int main()
 {
-    const int screenWidth = 1080;
-    const int screenHeight = 720;
+    //const int monitor = GetCurrentMonitor();
+    const int screenWidth = 1440;
+    const int screenHeight = 900;
 
     InitWindow(screenWidth, screenHeight, "ECC Vizuelizacija");
+    SetConfigFlags(FLAG_FULLSCREEN_MODE);
 
     SetTargetFPS(60);
     
@@ -81,12 +83,19 @@ int main()
             crcs.DrawCRCscreen();
             if (crcs.test && !crcs.reset)
             {
-                crcs.DrawScene();
-            }
+                if (crcs.canSend)
+                    crcs.DrawScene();
+                else
+                {
+                    crcs.prepareBits();
+                    crcs.DrawSendersSteps();
+                }
+            }   
             break;
         case Golay:
             break;
         }
+#pragma region mouse_click_event
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
             Vector2 mousePos;
@@ -115,13 +124,19 @@ int main()
             {
                 currentScreen = Menu;
             }
+#pragma endregion mouse_click_event
 #pragma region CRC
             if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
             {
                 if (crcs.test)
+                {
                     crcs.test = false;
+                }
                 else
+                {
                     crcs.test = true;
+                    crcs.reset = false;
+                }
             }
             if (currentScreen == Crc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
             {

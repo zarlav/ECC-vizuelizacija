@@ -1,6 +1,7 @@
 #include "CRCScreen.h"
 #include "CRC.h"
 #include "BitUtils.h"
+#include <iostream>
 CRCscreen::CRCscreen()
 {
 	this->mono = LoadFont("resources/JetBrainsMono-SemiBoldItalic.ttf");
@@ -97,11 +98,7 @@ bool CRCscreen::DrawScene()
 			bitsStr = BitUtils::BitsToString(bits);
 			Received = bitsStr;
 			error = res.error;
-			Remainder = BitUtils::BitsToString(res.remainder);
-			if (error)
-			{
-				infoTexts.push_back("Detektovana greska pri prenosu podatka!");
-			}
+			//RemainderReceiver = BitUtils::BitsToString(res.remainder);
 
 			finished = true;
 		}
@@ -144,13 +141,14 @@ void CRCscreen::DrawSendersSteps()
 	std::vector<std::string> stepsResult = crc.getStepSender();
 	DrawText("SENDER", screenWidth / 2.3f , 35, 25, DARKBLUE);
 	int y=0, x=0;
-
+	bool linija = false;
+	bool ostatakPrikaz = false;
 	if (!stepsResult.empty())
 	{
 		static float timer = 0.0f;
 		static int visibleSteps = 2;
 		timer += GetFrameTime();
-		if (timer >= 2.0f)
+		if (timer >= 1.0f)
 		{
 			timer = 0.0f;
 			if (visibleSteps < stepsResult.size())
@@ -163,20 +161,30 @@ void CRCscreen::DrawSendersSteps()
 		{
 			if (i >= 2)
 			{
-				if (stepsResult[i - 1][0] == '0')   // ovde se proverava kad treba da se shiftuje udesno 
+				if ( (stepsResult[i - 1][0] == '0' && stepsResult[i].size() == crc.getGeneratorSize() - 1) 
+					|| (linija && stepsResult[i-1][0] == '0')) // ovde se proverava kad treba da se shiftuje udesno 
 				{
+					bool vratiX = false;
 					x += textWidth + 2;
+					if (linija && stepsResult[i].size() == crc.getGeneratorSize())
+					{
+						x -= textWidth + 2;
+						vratiX = true;
+					}
 					Vector2 size = MeasureTextEx(mono, stepsResult[i].c_str(), 20, 1);
 					Vector2 start = { (float)screenWidth / 2.3f + x, (float)60 + y };
 					Vector2 end = { start.x + size.x, start.y + size.y };
+						DrawLine(
+							end.x,
+							end.y + textHeight,
+							end.x,
+							60,
+							BLACK
+						);
+					if(vratiX)
+						x += textWidth + 2;
+					linija = false;
 
-					DrawLine(
-						end.x,
-						end.y,
-						end.x,
-						end.y - gap,
-						BLACK
-					);
 				}
 			}
 			while (i != stepsResult.size() - 1 && stepsResult[i].size() < crc.getGeneratorSize())
@@ -192,10 +200,23 @@ void CRCscreen::DrawSendersSteps()
 			if (stepsResult[i].find_first_not_of('0') == std::string::npos || stepsResult[i] == BitUtils::BitsToString(crc.getGenerator()))
 			{
 				DrawLine(screenWidth / 2.3f + x, 60 + y + 20, screenWidth / 2.3f + textWidth*stepsResult[0].size(), 60 + y + 20, BLACK);
+				linija = true;
 			}
 		}
-		if (visibleSteps >= stepsResult.size())
-			canSend = true;
+		if (visibleSteps == stepsResult.size())
+			ostatakPrikaz = true;
+	}
+	if (ostatakPrikaz)
+	{
+		static float endTimer = 0.0f;
+		endTimer += GetFrameTime();
+
+		if (endTimer >= 5.0f)
+		{
+			canSend = true;  // da bi se iscrtala scena sender->receiver
+			RemainderSender = stepsResult[stepsResult.size() - 1];
+			return;
+		}
 	}
 
 }
@@ -211,8 +232,7 @@ void CRCscreen::DrawReceiversSteps()
 	DrawText("RECEIVER", screenWidth / 1.6f, 35, 25, GREEN);
 	int y = 0, x = 0;
 	int gap = textHeight;
-
-	Vector2 start = { (float)screenWidth / 1.6f + x, (float)60 + y };
+	bool linija = false;
 
 	if (!stepsResult.empty())
 	{
@@ -231,40 +251,52 @@ void CRCscreen::DrawReceiversSteps()
 		{
 			if (i >= 2)
 			{
-				if (stepsResult[i - 1][0] == '0')   // ovde se proverava kad treba da se shiftuje udesno 
+				if ((stepsResult[i - 1][0] == '0' && stepsResult[i].size() == crc.getGeneratorSize() - 1)
+					|| (linija && stepsResult[i - 1][0] == '0')) // ovde se proverava kad treba da se shiftuje udesno 
 				{
-					x += textWidth + 4;
+					bool vratiX = false;
+					x += textWidth + 2;
+					if (linija && stepsResult[i].size() == crc.getGeneratorSize())
+					{
+						x -= textWidth + 2;
+						vratiX = true;
+					}
 					Vector2 size = MeasureTextEx(mono, stepsResult[i].c_str(), 20, 1);
-					Vector2 end = {start.x + size.x, start.y + size.y};
+					Vector2 start = { (float)screenWidth / 1.6f + x, (float)60 + y };
+					Vector2 end = { start.x + size.x, start.y + size.y };
 					DrawLine(
 						end.x,
-						end.y,
+						end.y + textHeight,
 						end.x,
-						end.y + gap,
+						60,
 						BLACK
 					);
+					if (vratiX)
+						x += textWidth + 2;
+					linija = false;
+
 				}
 			}
 			while (i != stepsResult.size() - 1 && stepsResult[i].size() < crc.getGeneratorSize())
 			{
 				y += 20;
-				if (stepsResult[i][0] != '0')
-					x += textWidth;
-				DrawTextEx(mono, stepsResult[i].c_str(),  start, 20, 1, ORANGE);
+				DrawTextEx(mono, stepsResult[i].c_str(), { (float)screenWidth / 1.6f+x, (float)60+y }, 20, 1, ORANGE);
 				gap += gap;
 				i++;
 			}
 			y += 20;
-			DrawTextEx(mono, stepsResult[i].c_str(), start, 20, 1, GREEN);
+			DrawTextEx(mono, stepsResult[i].c_str(), { (float)screenWidth / 1.6f + x, (float)60+y }, 20, 1, GREEN);
 			gap += gap;
-			cnt++;
-			if ( (stepsResult[i].find_first_not_of('0') == std::string::npos && stepsResult[i-1].find_first_not_of('0') != std::string::npos) || (stepsResult[i] == BitUtils::BitsToString(crc.getGenerator()) && cnt>1))
+			if (stepsResult[i].find_first_not_of('0') == std::string::npos || stepsResult[i] == BitUtils::BitsToString(crc.getGenerator()))
 			{
-				DrawLine(screenWidth / 1.6f + x, 60 + y + 20, screenWidth / 1.6f + 400, 60 + y + 20, BLACK);
-				cnt = 0;
+				if(!linija)
+					DrawLine(screenWidth / 1.6f + x, 60 + y + 20, screenWidth / 1.6f + textWidth * stepsResult[0].size(), 60 + y + 20, BLACK);
+				linija = true;
 			}
 
 		}
+		if (visibleSteps == stepsResult.size())
+			RemainderReceiver = stepsResult[stepsResult.size() - 1];
 	}
 }
 
@@ -272,9 +304,9 @@ void CRCscreen::DrawSenderInfo()
 {
 	std::string inf;
 	inf = "Na ulaznom podatku se dodaju " + std::to_string(crc.getGeneratorSize() - 1) + " nula.\n";
-	inf += "Ulazni podatak ce biti: " + Input + std::string(crc.getGeneratorSize(), '0') + "\n";
+	inf += "Ulazni podatak ce biti: " + Input + std::string(crc.getGeneratorSize() - 1, '0') + "\n";
 	inf += "Zatim se radi XOR operacija sve dok se ne dodje do \n poslednjeg bita u ulaznom podatku.\n";
-	inf += "Na kraju se na originalnom ulaznom podatku dodaje ostatak,\n tada ce se poslati " + SentData;
+	inf += "Na kraju se na originalnom ulaznom podatku dodaje ostatak: \n" + RemainderSender + ", tada ce se poslati " + SentData;
 	ShowSenderInfo(inf);
 }
 
@@ -287,14 +319,10 @@ void CRCscreen::DrawReceiverInfo()
 	}
 	inf += "Primljeni podatak " + Received + "\n se deli ponovo sa generatorskim polinomom.\n";
 	inf += "Ako je ostatak pri deljenju 0, nema greske \n u suportonom postoji greska.\n";
+	inf += "Ostatak je: " + RemainderReceiver + "\n";
 	ShowReceiverInfo(inf);
 }
 
-void CRCscreen::DrawBitDown(float posx1, float posy1, float posx2, float posy2)
-{
-
-	DrawLine(posx1, posy1, posx2, posy2, DARKBROWN);
-}
 
 void CRCscreen::CheckButton(char bit)
 {

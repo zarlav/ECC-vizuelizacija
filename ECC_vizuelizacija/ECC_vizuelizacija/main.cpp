@@ -131,6 +131,7 @@ int main()
                 if (crcs.test)
                 {
                     crcs.test = false;
+                    crcs.reset = false;
                 }
                 else
                 {
@@ -202,6 +203,26 @@ int main()
             if (currentScreen == Lrc && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
             {
                 lrcs.CheckButton('-');
+            }
+            if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[0]))
+            {
+                lrcs.SelectedBitOption = 8;
+                lrcs.PaintSelectedBitOption();
+            }
+            else if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[1]))
+            {
+                lrcs.SelectedBitOption = 16;
+                lrcs.PaintSelectedBitOption();
+            }
+            else if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[2]))
+            {
+                lrcs.SelectedBitOption = 32;
+                lrcs.PaintSelectedBitOption();
+            }
+            else if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[3]))
+            {
+                lrcs.SelectedBitOption = 64;
+                lrcs.PaintSelectedBitOption();
             }
             
 #pragma endregion LRC

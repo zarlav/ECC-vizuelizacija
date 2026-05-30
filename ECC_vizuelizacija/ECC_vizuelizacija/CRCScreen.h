@@ -16,7 +16,6 @@ public:
 	void DrawReceiversSteps();
 	void DrawSenderInfo();
 	void DrawReceiverInfo();
-	void DrawBitDown(float posx1, float posy1, float posx2, float posy2);
 	std::vector<int> prepareBits();
 	bool test = false;
 	bool reset = false;
@@ -30,7 +29,8 @@ private:
 	std::string SimulatedBits;
 	std::string Input;
 	std::string Received;
-	std::string Remainder;
+	std::string RemainderSender;
+	std::string RemainderReceiver;
 	std::string SentData;
 	bool radBtn = false;
 	bool finished;

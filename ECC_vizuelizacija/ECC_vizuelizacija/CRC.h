@@ -20,8 +20,8 @@ public:
     std::vector<int> getGenerator();
 
 private:
-    std::vector<int> generator = {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1};	//generator: 
-    //std::vector<int> generator = { 1,1,0,1,1 };
+    //std::vector<int> generator = {1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1};	//generator: 
+    std::vector<int> generator = { 1,1,0,1,1 };
     std::vector<std::string> steps;
     std::vector<std::string> stepsSender;
     std::vector<std::string> stepsReceiver;

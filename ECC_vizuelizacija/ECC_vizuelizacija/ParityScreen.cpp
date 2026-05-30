@@ -28,18 +28,18 @@ bool ParityScreen::DrawScene()
     bits = BitUtils::StringToBits(Input);
     if (!errorButtonApplied)
     {
-        bits = pb.send(bits, IsRadBtn1Active());
-        bitsStr = BitUtils::BitsToString(bits);
+        transmittedBits = pb.send(bits, IsRadBtn1Active());
+        bitsStr = BitUtils::BitsToString(transmittedBits);
         SimulatedBits = bitsStr;
     }
     BaseScreen::DrawStaticScene();
 
     if (IsRadBtn3Active() && !errorButtonApplied && yPos >= (y2-y1)/2 && xPos >= (x2-x1)/2)
     {
-        ErrorResult = pb.introduceError(bits);
+        ErrorResult = pb.introduceError(transmittedBits);
         errorPosition = ErrorResult.second;
-        bits = ErrorResult.first;
-        bitsStr = BitUtils::BitsToString(bits);
+        transmittedBits = ErrorResult.first;
+        bitsStr = BitUtils::BitsToString(transmittedBits);
         SimulatedBits = bitsStr;
         std::cout << bitsStr << std::endl;
         errorButtonApplied = true;
@@ -66,7 +66,7 @@ bool ParityScreen::DrawScene()
 
         if (yPos >= y2)
         {
-            result = pb.receive(bits);
+            result = pb.receive(transmittedBits);
             bits = result.first;
             error = result.second;
 
@@ -93,6 +93,7 @@ void ParityScreen::ClearScene()
 
     errorButtonApplied = false;
     finished = false;
+    error = false;
     infoTexts.clear();
     Input.clear();
 }
@@ -236,7 +237,7 @@ void ParityScreen::DrawReceiverInfo()
     if (IsRadBtn1Active())
         inf += "Proverava se da li je broj jedinica paran\n ukljucujuci i parity bit.\nU podatku "+ SimulatedBits+ " ima "+ std::to_string(brojJedinica) + " jedinica.\n";
     else
-        inf += "Proverava se da li je broj jedinica neparan\ ukljucujuci i parity bit.\nU podatku " + SimulatedBits + " ima " + std::to_string(brojJedinica) + " jedinica.\n";
+        inf += "Proverava se da li je broj jedinica neparan\ ukljucujuci i parity bit.\nU primljenom podatku " + SimulatedBits + " ima " + std::to_string(brojJedinica) + " jedinica.\n";
 
     ShowReceiverInfo(inf);
 }

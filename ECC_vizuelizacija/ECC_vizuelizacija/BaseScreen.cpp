@@ -96,7 +96,7 @@ void BaseScreen::ShowReceiverInfo(std::string info)
     Rectangle box = {
         (float)width / 3 + 125,
         (float)height - height / 3 - 100,
-        (float)width - ((float)width / 3 + 125),
+        (float)width - ((float)width / 3 + 125) - 20,
         180
     };
 

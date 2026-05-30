@@ -30,16 +30,17 @@ std::vector<int> CRC::xorDivision(std::vector<int>& bits, bool sender)
 	{
 		for (int j = 0; j < generator.size(); j++)
 		{
-			result.push_back(deljenik[j] ^ generator[j]);
+			result.push_back(deljenik[j] ^ generator[j]);    //rezultat XOR-a
 		}
 		
 		steps.push_back(BitUtils::BitsToString(result));
-		if (result[1] == 0)  // rezultat pocinje sa 2 nule
+		if (result[0] == 0 && result[1] == 0)  // rezultat pocinje sa 2 nule
 		{
 			for (int p = 0; p < 2; p++)
 			{
 				if (p == 1)
 					steps.push_back(std::string(generator.size(), '0')); // nule
+
 				result.erase(result.begin());
 				steps.push_back(BitUtils::BitsToString(result));  // brisanje nule
 				if (pos < bits.size())
@@ -49,12 +50,13 @@ std::vector<int> CRC::xorDivision(std::vector<int>& bits, bool sender)
 				}
 				steps.push_back(BitUtils::BitsToString(result)); // spustanje sledeceg bita iz data
 			}
-			if(result.size() == generator.size() && (result[1] == 0 || result[0] == 0))
-				steps.push_back(std::string(generator.size(), '0'));
-			else
-				steps.push_back(BitUtils::BitsToString(generator));
+			steps.push_back(BitUtils::BitsToString(generator));
 			i++;
 		}
+		//else if (steps[i][0] == '0' && steps[i].size() == getGeneratorSize() && steps[i].find('1') != std::string::npos)
+		//{
+		//	steps.push_back(std::string(generator.size(), '0'));
+		//}
 		else
 		{
 			result.erase(result.begin());

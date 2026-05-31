@@ -176,21 +176,46 @@ int main()
             }
 #pragma endregion CRC
 #pragma region LRC
+            if (currentScreen == Lrc && CheckCollisionPointCircle(mousePos, Vector2{ screenWidth / 3.5 - 20, 100.0 }, 10.0))
+            {
+                lrcs.CheckRadioButton(ERROR_SIM);
+            }
+            if (currentScreen == Lrc && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 70.0 }, 10.0))
+            {
+                lrcs.CheckRadioButton(ODD_PARITY);
+            }
+            if (currentScreen == Lrc && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40.0 }, 10.0))
+            {
+                lrcs.CheckRadioButton(EVEN_PARITY);
+            }
             if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
             {
                 if (lrcs.test)
                     lrcs.test = false;
                 else
+                {
                     lrcs.test = true;
+                    lrcs.reset = false;
+                }
             }
             if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
             {
-                lrcs.ClearScene();
-                lrcs.reset = true;
+                if (lrcs.reset)
+                    lrcs.reset = false;
+                else
+                {
+                    lrcs.ClearScene();
+                    lrcs.reset = true;
+                }
             }
-            if (currentScreen == Lrc && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40 }, 10.0))
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 40, 300, screenWidth / 3.5 - 80, 30 }))
             {
-                lrcs.CheckRadioButton();
+                if (lrcs.generate)
+                    lrcs.generate = false;
+                else
+                {
+                    lrcs.generate = true;
+                }
             }
             if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
             {
@@ -207,24 +232,37 @@ int main()
             if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[0]))
             {
                 lrcs.SelectedBitOption = 8;
-                lrcs.PaintSelectedBitOption();
+                lrcs.CheckSelectedBitButton();
             }
             else if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[1]))
             {
                 lrcs.SelectedBitOption = 16;
-                lrcs.PaintSelectedBitOption();
+                lrcs.CheckSelectedBitButton();
             }
             else if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[2]))
             {
                 lrcs.SelectedBitOption = 32;
-                lrcs.PaintSelectedBitOption();
+                lrcs.CheckSelectedBitButton();
             }
             else if (CheckCollisionPointRec(mousePos, lrcs.bitButtons[3]))
             {
                 lrcs.SelectedBitOption = 64;
-                lrcs.PaintSelectedBitOption();
+                lrcs.CheckSelectedBitButton();
             }
-            
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
+            {
+                if (lrcs.senderInfoBtn)
+                    lrcs.senderInfoBtn = false;
+                else
+                    lrcs.senderInfoBtn = true;
+            }
+            if (currentScreen == Lrc && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
+            {
+                if (lrcs.receiverInfoBtn)
+                    lrcs.receiverInfoBtn = false;
+                else
+                    lrcs.receiverInfoBtn = true;
+            }
 #pragma endregion LRC
 #pragma region Hamming
             if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))

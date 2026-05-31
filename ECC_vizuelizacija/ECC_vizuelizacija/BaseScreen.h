@@ -2,6 +2,12 @@
 #include <vector>
 #include <string>
 #include <raylib.h>
+enum RadioButton
+{
+	EVEN_PARITY,
+	ODD_PARITY,
+	ERROR_SIM
+};
 class BaseScreen
 {
 public:

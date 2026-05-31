@@ -4,12 +4,6 @@
 #include <string>
 #include "BaseScreen.h"
 #include "ParityBit.h"
-enum RadioButton
-{
-    EVEN_PARITY,
-    ODD_PARITY,
-    ERROR_SIM
-};
 class ParityScreen : BaseScreen
 {
 public:

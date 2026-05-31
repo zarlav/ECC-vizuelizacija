@@ -51,7 +51,7 @@ void BaseScreen::DrawScreen()
     DrawRectangleLines(40, 180, width / 3.5 - 80, 30, DARKGREEN);
     DrawText("Testiraj", 40 + (width / 3.5 - 80) / 2 - MeasureText("Testiraj", 30) / 2, 180 + 30 / 2 - 30 / 2, 30, GREEN);
     DrawRectangleLines(40, 220, width / 3.5 - 80, 30, RED);
-    DrawText("Resetuj", 40 + (width / 3.5 - 100) / 2 - MeasureText("Resetuj", 30) / 2, 220 + 30 / 2 - 30 / 2, 30, RED);
+    DrawText("Resetuj", 40 + (width / 3.5 - 80) / 2 - MeasureText("Resetuj", 30) / 2, 220 + 30 / 2 - 30 / 2, 30, RED);
     DrawTriangleLines(backSpacePositions[0], backSpacePositions[1], backSpacePositions[2], RED);
     DrawRectangleLines(2 + width / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20, BLACK);
     DrawText("0", 2 + (width / 3.5 - 5 - 20 * 2 - 5) + 20 / 2 - MeasureText("0", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);

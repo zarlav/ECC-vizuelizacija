@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include <vector>
+#include <bitset>
 #include <iostream>
 
 #include "Button.h"
@@ -13,6 +14,7 @@
 #include "Hamming.h"
 #include "LRC.h"
 #include "CRC.h"
+#include "Golay.h"
 int main()
 {
     //const int monitor = GetCurrentMonitor();
@@ -40,6 +42,13 @@ int main()
     Button crcBtn(recCRCBttn, "CRC");
     Button lrcBtn(recLRCBttn, "LRC");
     Button golayBtn(recGolayBttn, "Golay");
+
+    Golay golay;
+    std::bitset<11> data("11011100010");
+    golay.odrediCiklicnuMatricu(data);
+    golay.odrediPodMatricuB();
+    golay.odrediGeneratorskuMatricu();
+    golay.odrediParityCheckMatricu();
 
 
     while (!WindowShouldClose())
@@ -92,7 +101,7 @@ int main()
                 }
             }   
             break;
-        case Golay:
+        case GOLAY:
             break;
         }
 #pragma region mouse_click_event
@@ -114,7 +123,7 @@ int main()
             }
             if (CheckCollisionPointRec(mousePos, recGolayBttn) && currentScreen == Menu)
             {
-                currentScreen = Golay;
+                currentScreen = GOLAY;
             }
             if (CheckCollisionPointRec(mousePos, recParityBttn) && currentScreen == Menu)
             {

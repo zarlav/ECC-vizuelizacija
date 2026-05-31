@@ -330,7 +330,7 @@ void LRCScreen::FillTable(int rows, int cols, int y, const std::vector<std::bits
 {
 	int cellW = 40;
 	int cellH = 40;
-	int x = GetScreenWidth() / 1.8;
+	int x = GetScreenWidth() / 1.4;
 
 	for (int r = 0; r < rows && r < data.size(); r++)
 	{
@@ -364,19 +364,19 @@ void LRCScreen::DrawSendersSteps()
 	switch (SelectedBitOption)
 	{
 	case 8:
-		DrawTable(2, 8, GetScreenWidth() / 1.8, 50, 40, 40);
+		DrawTable(2, 8, GetScreenWidth() / 1.4, 50, 40, 40);
 		FillTable(2, 8, 50, sentData);
 		break;
 	case 16:
-		DrawTable(3, 8, GetScreenWidth() / 1.8, 50, 40, 40);
+		DrawTable(3, 8, GetScreenWidth() / 1.4, 50, 40, 40);
 		FillTable(3, 8, 50, sentData);
 		break;
 	case 32:
-		DrawTable(5, 8, GetScreenWidth() / 1.8, 50, 40, 40);
+		DrawTable(5, 8, GetScreenWidth() / 1.4, 50, 40, 40);
 		FillTable(5, 8, 50, sentData);
 		break;
 	case 64:
-		DrawTable(9, 8, GetScreenWidth() / 1.8, 50, 40, 40);
+		DrawTable(9, 8, GetScreenWidth() / 1.4, 50, 40, 40);
 		FillTable(9, 8, 50, sentData);
 		break;
 	}
@@ -386,19 +386,19 @@ void LRCScreen::DrawReceiversSteps()
 	switch (SelectedBitOption)
 	{
 	case 8:
-		DrawTable(2, 8, GetScreenWidth() / 1.8, GetScreenHeight() / 2, 40, 40);
+		DrawTable(2, 8, GetScreenWidth() / 1.4, GetScreenHeight() / 2, 40, 40);
 		FillTable(2, 8, GetScreenHeight() / 2, receivedData);
 		break;
 	case 16:
-		DrawTable(3, 8, GetScreenWidth() / 1.8, GetScreenHeight() / 2, 40, 40);
+		DrawTable(3, 8, GetScreenWidth() / 1.4, GetScreenHeight() / 2, 40, 40);
 		FillTable(3, 8, GetScreenHeight() / 2, receivedData);
 		break;
 	case 32:
-		DrawTable(5, 8, GetScreenWidth() / 1.8, GetScreenHeight() / 2, 40, 40);
+		DrawTable(5, 8, GetScreenWidth() / 1.4, GetScreenHeight() / 2, 40, 40);
 		FillTable(5, 8, GetScreenHeight() / 2, receivedData);
 		break;
 	case 64:
-		DrawTable(9, 8, GetScreenWidth() / 1.8, GetScreenHeight() / 2, 40, 40);
+		DrawTable(9, 8, GetScreenWidth() / 1.4, GetScreenHeight() / 2, 40, 40);
 		FillTable(9, 8, GetScreenHeight() / 2, receivedData);
 		break;
 	}

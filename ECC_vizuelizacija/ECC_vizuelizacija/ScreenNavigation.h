@@ -6,5 +6,5 @@ enum ScreenNavigation
 	Crc,
 	Hamming,
 	Lrc,
-	Golay
+	GOLAY
 };

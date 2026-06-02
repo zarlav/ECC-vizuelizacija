@@ -10,6 +10,7 @@
 #include "HammingScreen.h"
 #include "LRCScreen.h"
 #include "CRCScreen.h"
+#include "GolayScreen.h"
 #include "ScreenNavigation.h"
 #include "Hamming.h"
 #include "LRC.h"
@@ -31,6 +32,7 @@ int main()
     HammingScreen hs;
     LRCScreen lrcs;
     CRCscreen crcs;
+    GolayScreen gscr;
     ScreenNavigation currentScreen = Menu;
     Rectangle recCRCBttn = { screenWidth/2 - 100,120, 200, 50 };
     Rectangle recParityBttn = { screenWidth / 2 - 100, 170, 200, 50 };
@@ -42,13 +44,6 @@ int main()
     Button crcBtn(recCRCBttn, "CRC");
     Button lrcBtn(recLRCBttn, "LRC");
     Button golayBtn(recGolayBttn, "Golay");
-
-    Golay golay;
-    std::bitset<11> data("11011100010");
-    golay.odrediCiklicnuMatricu(data);
-    golay.odrediPodMatricuB();
-    golay.odrediGeneratorskuMatricu();
-    golay.odrediParityCheckMatricu();
 
 
     while (!WindowShouldClose())
@@ -102,6 +97,13 @@ int main()
             }   
             break;
         case GOLAY:
+            gscr.DrawGolayScreen();
+            //gscr.NacrtajCiklicnuMatricu();
+            //gscr.NacrtajPodmatricu();
+            //gscr.NacrtajGeneratorskuMatricu();
+           // gscr.NacrtajParityCheckMatricu();
+            if(gscr.test)
+                gscr.DrawScene();
             break;
         }
 #pragma region mouse_click_event
@@ -361,6 +363,30 @@ int main()
                     ps.receiverInfoBtn = true;
             }
 #pragma endregion Parity
+#pragma region Golay
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
+            {
+                gscr.CheckButton('0');
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
+            {
+                gscr.CheckButton('1');
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
+            {
+                gscr.CheckButton('-');
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
+            {
+                if (gscr.test == false)
+                {
+                    gscr.test = true;
+                    //gscr.reset = false;
+                }
+                else
+                    gscr.test = false;
+            }
+#pragma endregion Golay
         }
         EndDrawing();
     }

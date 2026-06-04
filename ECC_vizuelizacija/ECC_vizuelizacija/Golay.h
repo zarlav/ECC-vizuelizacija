@@ -1,11 +1,12 @@
 #pragma once
 #include <bitset>
 #include <vector>
-#include <vector>
+#include <string>
 class Golay
 {
 public:
-	std::vector < std::bitset<1>> odrediKodnuRec(std::bitset<12> data);
+	Golay();
+	std::bitset<24>  odrediKodnuRec(std::bitset<12> data);
 	void odrediCiklicnuMatricu(std::bitset<11> b1);
 	void odrediPodMatricuB();
 	void odrediGeneratorskuMatricu();
@@ -19,10 +20,18 @@ public:
 	std::bitset<24> korak6(std::bitset<12> syndrome);
 	std::bitset<24> decode(std::bitset<24> received, bool& success);
 
+	std::bitset<24> VratiVector();
+
 	std::vector<std::string> VratiCiklicnaMatricaSteps();
 	std::vector<std::string> VratiPodMatricuSteps();
 	std::vector<std::string> VratiGeneratorskuMatricuSteps();
 	std::vector<std::string> VratiParityCheckMatricuSteps();
+	std::vector<std::string> VratiKodiranjeSteps();
+	std::vector<std::string> VratiSindromSteps();
+	std::vector<std::string> VratiDekodiranjeSteps();
+
+	std::bitset<11> VratiPolinomB();
+	std::bitset<12> VratiPrviSindrom();
 private:
 	uint8_t ciklicnaMatrica[11][11] = { 0 };
 	uint8_t podMatricaB[12][12] = { 0 };
@@ -30,10 +39,14 @@ private:
 	uint8_t parityCheckMatrica[12][24] = { 0 };
 	std::bitset<12> sindrom;
 	std::vector<std::bitset<24>> codewords;
-	std::vector<std::bitset<1>> vector;
+	std::bitset<24>  vector;
+	std::bitset<11> polinomb;
 
 	std::vector<std::string> CiklicnaMatricaSteps;
 	std::vector<std::string> PodMatricaSteps;
 	std::vector<std::string> GeneratorskaMatricaSteps;
 	std::vector<std::string> ParityCheckMatricaSteps;
+	std::vector<std::string> KodiranjeSteps;
+	std::vector<std::string> SindromSteps;
+	std::vector<std::string> DekodiranjeSteps;
 };

@@ -3,26 +3,43 @@
 #include <string>
 #include <algorithm>
 
-std::vector<std::bitset<1>> Golay::odrediKodnuRec(std::bitset<12> data)
+Golay::Golay()
 {
-	std::bitset<1> xorRez = 0;
-	for (int i = 0; i < 12; i++)
+	this->polinomb = std::bitset<11>("11011100010");
+}
+
+std::bitset<24> Golay::odrediKodnuRec(std::bitset<12> data)
+{
+	KodiranjeSteps.clear();
+
+	for (int j = 0; j < 24; j++)
 	{
-		for (int j = 0; j < 12; j++)
+		bool xorRez = 0;
+		std::string step = "v" + std::to_string(j) + " = ";
+
+		bool first = true;
+
+		for (int i = 0; i < 12; i++)
 		{
 			if (generatorskaMatrica[i][j] == 1)
 			{
-				codewords[i][j] = data[i];
-				if (j > 0)
-					xorRez[0] = xorRez[0] ^ codewords[i][j];
+				xorRez ^= data[i];
+
+				if (!first)
+					step += " XOR ";
+
+				step += "i" + std::to_string(i + 1);
+
+				first = false;
 			}
-			vector[i] = xorRez;
-			xorRez = 0;
 		}
-	} 
+
+		vector[j] = xorRez;
+		KodiranjeSteps.push_back(step);
+	}
+
 	return vector;
 }
-
 void Golay::odrediCiklicnuMatricu(std::bitset<11> b1)
 {
 	std::bitset<11> temp;
@@ -135,15 +152,34 @@ std::bitset<11> Golay::rotate_left(const std::bitset<11>& b, int shift)
 
 std::bitset<12> Golay::izracunajSindrom(std::bitset<24> received)
 {
+	SindromSteps.clear();
+
 	for (int i = 0; i < 12; i++)
 	{
 		int bit = 0;
+		std::string step = "s" + std::to_string(i) + " = ";
+
+		bool first = true;
+
 		for (int j = 0; j < 24; j++)
 		{
-			bit ^= (received[j] & parityCheckMatrica[i][j]);
+			if (parityCheckMatrica[i][j] == 1)
+			{
+				bit ^= received[j];
+
+				if (!first)
+					step += " XOR ";
+
+				step += "r" + std::to_string(j);
+
+				first = false;
+			}
 		}
+
 		sindrom[i] = bit;
+		SindromSteps.push_back(step);
 	}
+
 	return sindrom;
 }
 
@@ -190,6 +226,7 @@ std::bitset<12> Golay::izracunajDrugiSindrom(std::bitset<12> syndrome)
 		{
 			bit ^= (syndrome[j] & podMatricaB[i][j]);
 		}
+		drugiSindrom[i] = bit;
 	}
 	return drugiSindrom;
 }
@@ -225,16 +262,24 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 	success = false;
 
 	std::bitset<12> syndrome = izracunajSindrom(received);
-
+	std::string str;
+	std::bitset<24> rez;
+	DekodiranjeSteps.clear();
 	if (odrediTezinuSindroma(syndrome) <= 3)
 	{
 		std::bitset<24> errorVector = 0;
-
+		str.clear();
 		for (int i = 0; i < 12; i++)
 			errorVector[i] = syndrome[i];
-
+		str = errorVector.to_string();
+		DekodiranjeSteps.push_back(str);
+		str = received.to_string();
+		DekodiranjeSteps.push_back(str);
+		rez = received ^ errorVector;
+		DekodiranjeSteps.push_back("XOR");
+		DekodiranjeSteps.push_back(rez.to_string());
 		success = true;
-		return received ^ errorVector;
+		return rez;
 	}
 
 	std::bitset<24> errorVector = korak3(syndrome);
@@ -269,6 +314,11 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 	return corrected;
 }
 
+std::bitset<24> Golay::VratiVector()
+{
+	return vector;
+}
+
 std::vector<std::string> Golay::VratiCiklicnaMatricaSteps()
 {
 	return CiklicnaMatricaSteps;
@@ -287,5 +337,30 @@ std::vector<std::string> Golay::VratiGeneratorskuMatricuSteps()
 std::vector<std::string> Golay::VratiParityCheckMatricuSteps()
 {
 	return ParityCheckMatricaSteps;
+}
+
+std::vector<std::string> Golay::VratiKodiranjeSteps()
+{
+	return KodiranjeSteps;
+}
+
+std::vector<std::string> Golay::VratiSindromSteps()
+{
+	return SindromSteps;
+}
+
+std::vector<std::string> Golay::VratiDekodiranjeSteps()
+{
+	return DekodiranjeSteps;
+}
+
+std::bitset<11> Golay::VratiPolinomB()
+{
+	return polinomb;
+}
+
+std::bitset<12> Golay::VratiPrviSindrom()
+{
+	return sindrom;
 }
 

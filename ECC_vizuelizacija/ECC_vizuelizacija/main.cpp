@@ -19,7 +19,7 @@
 int main()
 {
     //const int monitor = GetCurrentMonitor();
-    const int screenWidth = 1440;
+    const int screenWidth = 1600;
     const int screenHeight = 900;
 
     InitWindow(screenWidth, screenHeight, "ECC Vizuelizacija");
@@ -98,10 +98,6 @@ int main()
             break;
         case GOLAY:
             gscr.DrawGolayScreen();
-            //gscr.NacrtajCiklicnuMatricu();
-            //gscr.NacrtajPodmatricu();
-            //gscr.NacrtajGeneratorskuMatricu();
-           // gscr.NacrtajParityCheckMatricu();
             if(gscr.test)
                 gscr.DrawScene();
             break;
@@ -385,6 +381,26 @@ int main()
                 }
                 else
                     gscr.test = false;
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 260, screenWidth / 3.5 - 80, 30 }))
+            {
+                gscr.CheckPrikazBtn(btnBC);
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 300, screenWidth / 3.5 - 80, 30 }))
+            {
+                gscr.CheckPrikazBtn(btnB);
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 340, screenWidth / 3.5 - 80, 30 }))
+            {
+                gscr.CheckPrikazBtn(btnG);
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 380, screenWidth / 3.5 - 80, 30 }))
+            {
+                gscr.CheckPrikazBtn(btnH);
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 420, screenWidth / 3.5 - 80, 30 }))
+            {
+                gscr.CheckPrikazBtn(btnV);
             }
 #pragma endregion Golay
         }

@@ -57,6 +57,16 @@ void BaseScreen::DrawScreen()
     DrawText("0", 2 + (width / 3.5 - 5 - 20 * 2 - 5) + 20 / 2 - MeasureText("0", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
     DrawRectangleLines(2 + width / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20, BLACK);
     DrawText("1", 2 + (width / 3.5 - 5 - 20 - 2) + 20 / 2 - MeasureText("1", 20) / 2, 140 + 5 + 20 / 2 - 20 / 2, 20, RED);
+    int x = width / 2;
+    int y = height - 60 - 30;
+    DrawRectangle(x + 50, y, 200, 60, LIME);
+    DrawText(
+        "DALJE",
+        x + 300 / 2,
+        y + (60 - 30) / 2,
+        30,
+        WHITE
+    );
 }
 
 void BaseScreen::ShowSenderInfo(std::string info)

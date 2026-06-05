@@ -7,7 +7,8 @@ enum PrikazBttn
 	btnB,
 	btnG,
 	btnH,
-	btnV
+	btnV,
+	btnNext
 };
 class GolayScreen : BaseScreen
 {
@@ -34,6 +35,9 @@ public:
 	bool test = false;
 private:
 	std::string Input;
+	std::string SimulatedBits;
+	std::string Received;
+
 	Font mono;
 	bool sent = false;
 	bool finished = false;
@@ -46,12 +50,12 @@ private:
 	bool paritycheckFinished = true;
 	bool vectorFinished = true;
 	bool decodeFinished = true;
+	bool prikaziDekodirano = false;
 
 	bool btnPrikaziBc = false;
 	bool btnPrikaziB = false;
 	bool btnPrikaziG = false;
 	bool btnPrikaziH = false;
 	bool btnPrikaziVektorV = false;
-
-
+	bool btnDalje = false;
 };

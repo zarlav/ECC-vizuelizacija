@@ -21,7 +21,6 @@ int main()
     //const int monitor = GetCurrentMonitor();
     const int screenWidth = 1600;
     const int screenHeight = 900;
-
     InitWindow(screenWidth, screenHeight, "ECC Vizuelizacija");
     SetConfigFlags(FLAG_FULLSCREEN_MODE);
 
@@ -372,6 +371,10 @@ int main()
             {
                 gscr.CheckButton('-');
             }
+            if (currentScreen == GOLAY && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 100 }, 10.0))
+            {
+                gscr.CheckRadioButton();
+            }
             if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
             {
                 if (gscr.test == false)
@@ -401,6 +404,10 @@ int main()
             if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 420, screenWidth / 3.5 - 80, 30 }))
             {
                 gscr.CheckPrikazBtn(btnV);
+            }
+            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth()/2 , (float)GetScreenHeight() - 60 - 30, 200, 60}))
+            {
+                gscr.CheckPrikazBtn(btnNext);
             }
 #pragma endregion Golay
         }

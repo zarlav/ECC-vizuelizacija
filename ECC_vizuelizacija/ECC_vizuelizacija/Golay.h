@@ -19,6 +19,7 @@ public:
 	std::bitset<12> izracunajDrugiSindrom(std::bitset<12> syndrome); 
 	std::bitset<24> korak6(std::bitset<12> syndrome);
 	std::bitset<24> decode(std::bitset<24> received, bool& success);
+	std::pair< std::bitset<24>, std::vector<int>> generisiGresku(std::bitset<24>& data, int brojGresaka);
 
 	std::bitset<24> VratiVector();
 

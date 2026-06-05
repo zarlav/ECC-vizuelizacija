@@ -273,21 +273,26 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 			errorVector[i] = syndrome[i];
 		str = errorVector.to_string();
 		DekodiranjeSteps.push_back(str);
+		DekodiranjeSteps.push_back("XOR");
 		str = received.to_string();
 		DekodiranjeSteps.push_back(str);
 		rez = received ^ errorVector;
-		DekodiranjeSteps.push_back("XOR");
 		DekodiranjeSteps.push_back(rez.to_string());
 		success = true;
 		return rez;
 	}
 
 	std::bitset<24> errorVector = korak3(syndrome);
+	str.clear();
+	str = "Rezultat koraka 3: " + errorVector.to_string();
+	DekodiranjeSteps.push_back(str);
 
 	if (!errorVector.any())
 	{
 		std::bitset<12> drugiSindrom = izracunajDrugiSindrom(syndrome);
-
+		str.clear();
+		str = "Drugi sindrom je: " + drugiSindrom.to_string();
+		DekodiranjeSteps.push_back(str);
 		if (odrediTezinuSindroma(drugiSindrom) <= 3)
 		{
 			std::bitset<24> errorVector2 = 0;
@@ -300,6 +305,8 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 		}
 
 		errorVector = korak6(drugiSindrom);
+		DekodiranjeSteps.push_back("Rezultat koraka 6: ");
+		DekodiranjeSteps.push_back(errorVector.to_string());
 	}
 
 	if (!errorVector.any())
@@ -312,6 +319,25 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 
 	success = true;
 	return corrected;
+}
+
+std::pair<std::bitset<24>, std::vector<int>>
+Golay::generisiGresku(std::bitset<24>& data, int brojGresaka)
+{
+	std::vector<int> pozicije;
+
+	while (pozicije.size() < brojGresaka)
+	{
+		int pozicija = rand() % 24;
+
+		if (std::find(pozicije.begin(), pozicije.end(), pozicija) == pozicije.end())
+		{
+			data.flip(pozicija);
+			pozicije.push_back(pozicija);
+		}
+	}
+
+	return { data, pozicije };
 }
 
 std::bitset<24> Golay::VratiVector()

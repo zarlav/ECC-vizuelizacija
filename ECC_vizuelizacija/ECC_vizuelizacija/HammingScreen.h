@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <vector>
 #include "BaseScreen.h"
+#include "Hamming.h"
 class HammingScreen : BaseScreen
 {
 public:
@@ -17,6 +18,11 @@ public:
 	void CheckRadioButton();
 	void CheckButton(char bit);
 	void DrawInfoText();
+
+	void DrawSenderInfo();
+	void NacrtajKorak1();
+
+
 	int GetInputLength();
 private:
 	int errorPosition;
@@ -29,4 +35,6 @@ private:
 	bool errorButtonApplied = false;
 	bool error = false;
 	Color ColorRadBtn = GRAY;
+	Font mono;
+	Haming ham;
 };

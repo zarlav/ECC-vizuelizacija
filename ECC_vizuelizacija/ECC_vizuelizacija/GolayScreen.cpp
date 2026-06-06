@@ -84,7 +84,8 @@ bool GolayScreen::DrawScene()
 		{
 			NacrtajMinimiziranuMatricu();
 		}
-		DrawText(golay.VratiVector().to_string().c_str(), xPos, yPos, 20, BLACK);
+		if(!prikaziDekodirano && yPos <= (y2-y1)/2)
+			DrawText(golay.VratiVector().to_string().c_str(), xPos, yPos, 20, BLACK);
 		NacrtajKorakeDekodiranja();
 	}
 	BaseScreen::DrawStaticScene();
@@ -93,6 +94,7 @@ bool GolayScreen::DrawScene()
 		std::bitset<24> v = golay.VratiVector();
 		errorResult = golay.generisiGresku(v, 4);
 		SimulatedBits = errorResult.first.to_string();
+		bitsStr = SimulatedBits;
 		errorPositions = errorResult.second;
 		errorButtonApplied = true;
 	}
@@ -120,6 +122,10 @@ bool GolayScreen::DrawScene()
 			);
 		}
 	}
+	if (!errorButtonApplied && !bitsStr.empty() && !finished)
+	{
+		DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
+	}
 	if (!finished && sent)
 	{
 		BaseScreen::AnimateCode();
@@ -136,6 +142,7 @@ bool GolayScreen::DrawScene()
 				result = golay.decode(golay.VratiVector(), success);
 			}
 			Received = result.to_string();
+			bitsStr = result.to_string();
 			finished = true;
 		}
 	}
@@ -145,8 +152,7 @@ bool GolayScreen::DrawScene()
 		{
 			NacrtajDekodiranje();
 		}
-		if(prikaziDekodirano)
-			DrawText(Received.c_str(), xPos, yPos, 20, BLACK);
+		DrawText(Received.c_str(), xPos, yPos, 20, BLACK);
 	}
 	return finished;
 }
@@ -154,7 +160,8 @@ void GolayScreen::CheckButton(char bit)
 {
 	if (bit == '1' || bit == '0')
 	{
-		Input += bit;
+		if(Input.size() <12)
+			Input += bit;
 	}
 	else
 	{
@@ -294,8 +301,8 @@ void GolayScreen::NacrtajCiklicnuMatricu()
 	int y = 0;
 
 	std::vector<std::string> ciklicnaMatricaSteps = golay.VratiCiklicnaMatricaSteps();
-	DrawTextEx(mono, "Ciklicna matrica", { (float)screenWidth / 1.8f, (float)40  }, 30, 2, GRAY);
-	DrawTextEx(mono, "Svaki novi red se shifta za 1 bit u levo!", { (float)screenWidth / 1.8f, (float)screenHeight/2 }, 30, 2, GRAY);
+	DrawTextEx(mono, "Ciklicna matrica", { (float)screenWidth / 1.8f, (float)40  }, 30, 2, DARKBLUE);
+	DrawTextEx(mono, "Svaki novi red se shifta za 1 bit u levo!", { (float)screenWidth / 1.8f, (float)screenHeight/2 }, 30, 2, ORANGE);
 	if (!ciklicnaMatricaSteps.empty())
 	{
 		DrawTextEx(mono, "Bc=", { (float)screenWidth / 1.8f, (float)60 + 5 * size.y }, 30, 2, GRAY);
@@ -363,7 +370,8 @@ void GolayScreen::NacrtajPodmatricu()
 	Vector2 size = MeasureTextEx(mono, "1", 25, 2);
 	int y = 0;
 	std::vector<std::string> podMatricaBSteps = golay.VratiPodMatricuSteps();
-	DrawTextEx(mono, "Matrica B", { (float)screenWidth / 1.8f, (float)40 }, 30, 2, GRAY);
+	DrawTextEx(mono, "Matrica B", { (float)screenWidth / 1.8f, (float)40 }, 30, 2, DARKBLUE);
+	DrawTextEx(mono, "j je vektor j=[1,1,1,1,1,1,1,1,1,1,1]", { (float)screenWidth / 1.8f, (float)screenHeight / 2 }, 30, 2, ORANGE);
 	if (!podMatricaBSteps.empty())
 	{
 		DrawTextEx(mono, "B=", { (float)screenWidth / 2.2f - 25, (float)60 + 6 * size.y }, 30, 1, GRAY);
@@ -432,6 +440,7 @@ void GolayScreen::NacrtajGeneratorskuMatricu()
 	int y = 0;
 	std::vector<std::string> generatorskaMatricaSteps = golay.VratiGeneratorskuMatricuSteps();
 	DrawTextEx(mono, "Generatorska matrica", { (float)screenWidth / 1.8f, (float)40 }, 30, 2, DARKBLUE);
+	DrawTextEx(mono, "B^T=B, B B^T= I, B^2=I", { (float)screenWidth / 1.8f, (float)screenHeight / 2 }, 30, 2, ORANGE);
 	if (!generatorskaMatricaSteps.empty())
 	{
 		DrawTextEx(mono, "G=[B I] -> G=", { (float)screenWidth / 2.2f - 30, (float)60 + 6 * size.y }, 30, 2, GRAY);
@@ -588,7 +597,7 @@ void GolayScreen::NacrtajVektor()
 	);
 	std::string vektorV = "v=";
 	vektorV += golay.VratiVector().to_string();
-	DrawTextEx(mono, vektorV.c_str(), { (float)screenWidth / 2.2f - 30, 120 }, 25, 2, GRAY);
+	DrawTextEx(mono, vektorV.c_str(), { (float)screenWidth / 2.2f - 30, 120 }, 25, 2, DARKBLUE);
 	std::bitset<12> input(Input);
 	golay.odrediKodnuRec(input);
 	std::vector<std::string> kodiranjeSteps = golay.VratiKodiranjeSteps();
@@ -876,29 +885,29 @@ void GolayScreen::NacrtajMinimiziranuMatricu()
 void GolayScreen::NacrtajKorakeDekodiranja()
 {
 	int x = 20;
-	int y = GetScreenHeight() - 140;
+	int y = GetScreenHeight() - 400;
 	Color boja = MAROON;
 	std::string std = "Algoritam dekodiranja";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 500, (float)y + x }, 20, 1, boja);
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
 	x += 20;
 	std = "Korak 1: Izracunati sindrom s=wH^T";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
 	x += 20;
 	std = "Korak 2: if wt(s) <=3 then u=[s,000000000000]";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
 	x += 20;
-	std = "Korak 3: if wt(s+bi)<=2 za neko bi iz B then u=[s+bi,ei]";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
-	x += 20;
+	std = "Korak 3: if wt(s+bi)<=2 za neko bi iz B\n then u=[s+bi,ei]";
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
+	x += 40;
 	std = "Korak 4: Izracunati drugi sindrom sB";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
 	x += 20;
-	std = "Korak 5: if wt(sB) <=3 then u=[000000000000, sB]";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
-	x += 20;
-	std = "Korak 6: if wt(sB+bi) <=2 za neko bi iz B then u=[ei,sB+bi]";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
-	x += 20;
+	std = "Korak 5: if wt(sB) <=3\n then u=[000000000000, sB]";
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
+	x += 40;
+	std = "Korak 6: if wt(sB+bi) <=2 za neko bi iz B\n then u=[ei,sB+bi]";
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
+	x += 40;
 	std = "Korak 7: if u not yet determined then request retransmission";
-	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 650, (float)y + x }, 20, 1, boja);
+	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - 450, (float)y + x }, 20, 1, boja);
 }

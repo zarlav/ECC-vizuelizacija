@@ -8,8 +8,12 @@ Haming::Haming()
 }
 std::vector<int> Haming::send(std::vector<int>& data)
 {
+	std::string str;
 	int r = getParityBits(data.size() - 1); // broj redudantnih bitova
-	data.insert(data.begin(), 0);
+	senderSteps.clear();
+	str = "Broj redudantnih bitova je: " + std::to_string(r);
+	senderSteps.push_back(str);
+	data.insert(data.begin(), 0); // ovde unacujem lazni prvi bit 0, da bi hamingovi krenuli od pozicije 1
 	for (int i = 0, p = 1; i < r ; i++)
 	{
 		data.insert(data.begin() + p, -1);  // pocetne vrednosti za redudantne bitove
@@ -18,7 +22,7 @@ std::vector<int> Haming::send(std::vector<int>& data)
 		else
 			p *= 2;
 	}
-
+	str.clear();
 	for (int i = 0, p=1; i < r; i++)   // dodajemo redudantne bitove 
 	{
 		std::bitset<3> x(p);
@@ -28,11 +32,20 @@ std::vector<int> Haming::send(std::vector<int>& data)
 			data[p] = 0;
 		else
 			data[p] = 1;
+		str = "Redudantni bit na poziciji " + std::to_string(p) + " je dobio vrednost: " + std::to_string(oneConter);
+		senderSteps.push_back(str);
 		if (p == 1)
 			p++;
 		else
 			p *= 2;
 	}
+	str.clear();
+	std::vector<int> result(data.begin() + 1, data.end());
+	for (int x : result)
+	{
+		str += std::to_string(x);
+	}
+	senderSteps.push_back(str);
 	return data;
 }
 
@@ -165,4 +178,9 @@ std::pair<std::vector<int>, int> Haming::introduceError(std::vector<int>& data)
 		data[rPos] ^= 1;
 		return { data, rPos };
 	}
+}
+
+std::vector<std::string> Haming::getSenderSteps()
+{
+	return senderSteps;
 }

@@ -115,32 +115,53 @@ std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 	//
 	//introduceError(data);
 	//
+	receiverSteps.clear();
+	std::string str;
 	for (int i = 0, p = 1; i < parityBits; i++)   // proveravamo redudantne bitove
 	{
 		std::bitset<3> x(p);
 		std::vector<int> csb = checkSameBit(x, data, true);
 		int oneCounter = caluclateParityBit(csb);
+		str = "Za bit na poziciji " + std::to_string(p) + " se proverava da li je bit: "+ std::to_string(oneCounter);
+		receiverSteps.push_back(str);
 		if (oneCounter == 0 && data[p] != 0)
 			detectedError = true;
 		else if (oneCounter == 1 && data[p] != 1)
 			detectedError = true;
 		if (detectedError)
+		{
 			binaryNumber.insert(binaryNumber.begin(), oneCounter);
+		}
 		if (p == 1)
 			p++;
 		else
 			p *= 2;
 	}
 
+	str.clear();
+
+	for (int i = 1; i < data.size(); i++)
+	{
+		str += std::to_string(data[i]);
+	}
+	receiverSteps.push_back(str);
+
 	if (detectedError) // ispravljanje greske
 	{
+		str = "Detektovana je greska!";
+		receiverSteps.push_back(str);
 		int decimalNumber = 0;
 		int size = binaryNumber.size();
+		str.clear();
+		for (int x : binaryNumber)
+			str += binaryNumber[x];
+		receiverSteps.push_back(str);
 		for (int i = 0, j = size-1 ; i < size ; i++, j--)
 		{
 			decimalNumber += binaryNumber[i] * pow(2, j);
 		}
-
+		str += "  :" + decimalNumber;
+		receiverSteps.push_back(str);
 		data[decimalNumber] ^= 1;
 	}
 
@@ -183,4 +204,9 @@ std::pair<std::vector<int>, int> Haming::introduceError(std::vector<int>& data)
 std::vector<std::string> Haming::getSenderSteps()
 {
 	return senderSteps;
+}
+
+std::vector<std::string> Haming::getReceiverSteps()
+{
+	return receiverSteps;
 }

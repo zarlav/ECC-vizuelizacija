@@ -278,6 +278,10 @@ int main()
                 else
                     hs.test = true;
             }
+            if (currentScreen == Hamming && CheckCollisionPointCircle(mousePos, Vector2{ screenWidth / 3.5 - 20, 100.0 }, 10.0))
+            {
+                hs.CheckRadioButton();
+            }
             if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
             {
                 hs.ClearScene();

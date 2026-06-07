@@ -17,10 +17,12 @@ public:
 	void DrawHammingScreen();
 	void CheckRadioButton();
 	void CheckButton(char bit);
+	void CheckButtonNext();
 	void DrawInfoText();
 
 	void DrawSenderInfo();
-	void NacrtajKorak1();
+	void NacrtajEnkodiranje();
+	void NacrtajDekodiranje();
 
 
 	int GetInputLength();
@@ -34,6 +36,7 @@ private:
 	bool finished;
 	bool errorButtonApplied = false;
 	bool error = false;
+	bool btnDalje = false;
 	Color ColorRadBtn = GRAY;
 	Font mono;
 	Haming ham;

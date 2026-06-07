@@ -35,13 +35,7 @@ void HammingScreen::DrawHammingScreen()
     DrawText("Hamming code", width / 2 - MeasureText("Hamming code", 40) / 2, 0, 40, GRAY);
     DrawScreen();
     DrawText(Input.c_str(), 2 + (width / 3.5 - 5 - textWidth) / 2, 140 + (30 - 20) / 2, 20, BLACK);
-    //int xInput = 2 + width / 3.5 - 5 - 20 * 2 - 5 + 20;
-    //int yInput = 140 + 5;
-    //for (int i = 0; i < Input.size(); i++)
-    //{
-    //    char bit[2] = { Input[i], '\0' };
-    //    DrawText(bit, xInput - textWidth - 20, yInput, 20, BLACK);
-    //}
+    DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn);
 }
 
 bool HammingScreen::DrawScene()
@@ -112,7 +106,8 @@ bool HammingScreen::DrawScene()
     if (finished)
     {
         DrawText(Received.c_str(), xPos, yPos, 20, BLACK);
-        NacrtajKorak1();
+       // NacrtajEnkodiranje();
+        NacrtajDekodiranje();
     }
     return finished;
 
@@ -132,40 +127,93 @@ void HammingScreen::CheckButton(char bit)
 	std::cout << Input;
 }
 
-void HammingScreen::NacrtajKorak1()
+void HammingScreen::CheckButtonNext()
+{
+    if (btnDalje)
+        btnDalje = false;
+    else
+        btnDalje = true;
+}
+
+void HammingScreen::NacrtajEnkodiranje()
 {
     int x = GetScreenWidth() / 2.2;
     int y = 60;
     int gap = 0;
+    std::string str;
+    str = "Racunanje za redudantni bit R1:";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 25, 2, RED);
+    gap += 30;
+    str ="gledaju se bitovi cije pozicije, u binarnom prikazu, imaju jedinice kao i R1\n "
+        "1[0001],3[0011],5[0101],7[0111],9[1001],11[1011]";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
+    gap += 60;
+    str = "Racunanje za redudantni bit R2:";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 25, 2, RED);
+    gap += 30;
+    str = "gledaju se bitovi cije pozicije, u binarnom prikazu, imaju jedinice kao i R2\n "
+        "2[0010],3[0011],7[0111],10[1010],11[1011]";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
+    gap += 60;
+    str = "Racunanje za redudantni bit R4:";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 25, 2, RED);
+    gap += 30;
+    str = "gledaju se bitovi cije pozicije, u binarnom prikazu, imaju jedinice kao i R4\n "
+        "4[0100],5[0101],6[1010],7[0111]";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
+    gap += 60;
+    str = "Racunanje za redudantni bit R8:";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 25, 2, RED);
+    gap += 30;
+    str = "gledaju se bitovi cije pozicije, u binarnom prikazu, imaju jedinice kao i R8\n "
+        "11[0010],10[0011],9[0111],8[1010]";
+    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
+    gap += 60;
     std::vector<std::string> steps = ham.getSenderSteps();
     if (!steps.empty())
     {
         for (int i = 0; i < steps.size(); i++)
         {
-            DrawTextEx(mono, steps[i].c_str(), {(float)x , (float)y + gap}, 25, 2, DARKBLUE);
-            gap += 30;
+            if (i == steps.size() - 1)
+            {
+                int duzina = steps[i].size();
+                int step = 0;
+                int spacing = 3;
+                for (int j = 1; j <= duzina; j++)
+                {
+                    DrawTextEx(mono, std::to_string(j).c_str(), { (float)x + step, (float)y + gap }, 25, spacing, DARKPURPLE);
+                    if (j > 9)
+                    {
+                        step += 30;
+                        spacing = 1;
+                    }
+                    else
+                    {
+                        step += 15;
+                    }
+                }
+                gap += 30;
+                DrawTextEx(mono, steps[i].c_str(), { (float)x , (float)y + gap }, 25, 4, DARKBLUE);
+            }
+            else
+            {
+                DrawTextEx(mono, steps[i].c_str(), { (float)x , (float)y + gap }, 25, 2, DARKBLUE);
+                gap += 30;
+            }
         }
     }
-    std::string str;
-    str = "Racunanje za redudantni bit R1:\n"
-        "gledaju se bitovi cije pozicije, u binarno prikazu, imaju jedinice kao i R1\n "
-        "1[0001],3[0010],5[0101],7[0111],9[1001],11[1011]";
-    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
-    gap += 90;
-    str = "Racunanje za redudantni bit R2:"
-        "gledaju se bitovi cije pozicije, u binarno prikazu, imaju jedinice kao i R2\n "
-        "2[0010],3[0011],7[0111],10[1010],11[1011]";
-    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
-    gap += 90;
-    str = "Racunanje za redudantni bit R4:\n"
-        "gledaju se bitovi cije pozicije, u binarno prikazu, imaju jedinice kao i R4\n "
-        "4[0100],5[0101],6[1010],7[0111]";
-    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
-    gap += 90;
-    str = "Racunanje za redudantni bit R8:\n"
-        "gledaju se bitovi cije pozicije, u binarno prikazu, imaju jedinice kao i R8\n "
-        "11[0010],10[0011],9[0111],8[1010]";
-    DrawTextEx(mono, str.c_str(), { (float)x , (float)y + gap }, 20, 2, BLACK);
+}
+void HammingScreen::NacrtajDekodiranje()
+{
+    int x = GetScreenWidth() / 2.2;
+    int y = 60;
+    int gap = 0;
+    std::vector<std::string> steps = ham.getReceiverSteps();
+    for (int i = 0; i < steps.size(); i++)
+    {
+        DrawTextEx(mono, steps[i].c_str(), { (float)x , (float)y + gap }, 25, 2, DARKGREEN);
+        gap += 30;
+    }
 }
 void HammingScreen::DrawSenderInfo()
 {

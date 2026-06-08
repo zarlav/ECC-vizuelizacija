@@ -77,7 +77,7 @@ void BaseScreen::ShowSenderInfo(std::string info)
         (float)width / 3 + 125,
         40,
         float(width)- ((float)width / 3 + 125) - 20,
-        180
+        340
     };
     DrawRectangleRec(box, SVETLOZELENA);
     DrawRectangleLinesEx(box, 2, DARKGREEN);

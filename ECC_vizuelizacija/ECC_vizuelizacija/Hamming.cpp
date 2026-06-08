@@ -9,7 +9,7 @@ Haming::Haming()
 std::vector<int> Haming::send(std::vector<int>& data)
 {
 	std::string str;
-	int r = getParityBits(data.size() - 1); // broj redudantnih bitova
+	int r = getParityBits(data.size()); // broj redudantnih bitova
 	senderSteps.clear();
 	str = "Broj redudantnih bitova je: " + std::to_string(r);
 	senderSteps.push_back(str);
@@ -25,7 +25,7 @@ std::vector<int> Haming::send(std::vector<int>& data)
 	str.clear();
 	for (int i = 0, p=1; i < r; i++)   // dodajemo redudantne bitove 
 	{
-		std::bitset<3> x(p);
+		std::bitset<4> x(p);
 		std::vector<int> csb = checkSameBit(x , data, false);
 		int oneConter = caluclateParityBit(csb);
 		if (oneConter == 0)
@@ -51,48 +51,34 @@ std::vector<int> Haming::send(std::vector<int>& data)
 
 int Haming::getParityBits(int n)
 {
-	int r = 2;
-	while (r + n + 1 > pow(2, r))
+	int r = 0;
+
+	while ((1 << r) < (n + r + 1))
 	{
 		r++;
 	}
+
 	parityBits = r;
-	return parityBits;
+	return r;
 }
 
-std::vector<int> Haming::checkSameBit(std::bitset<3> x, std::vector<int>& data, bool receive)
+std::vector<int> Haming::checkSameBit(std::bitset<4> x, std::vector<int>& data, bool receive)
 {
-	int pos = 0;
-	int size = data.size() -1 ;
+	int size = data.size() - 1;
 	int decimal = x.to_ulong();
 	std::vector<int> bitsPositions;
-	for (int i = 0; i < 3; i++)
-	{
-		if (x[i] == 1)
-		{
-			pos = i;
-			break;
-		}
-	}
-
 
 	for (int i = 1; i <= size; i++)
 	{
-		decCode.first = i;
-		decCode.second = std::bitset<3>(i);
-		std::bitset<3> bitWord = decCode.second;
-		for (int j = 0; j < 3; j++)
+		if ((i & decimal) != 0)
 		{
-			if (bitWord[j] == 1 && pos == j)
-			{
-				if (receive && decimal == i)
-					continue;
-				else	
-					bitsPositions.insert(bitsPositions.begin(), data[i]);
-				break;
-			}
+			if (receive && decimal == i)
+				continue;
+			else
+				bitsPositions.push_back(data[i]);
 		}
 	}
+
 	return bitsPositions;
 }
 
@@ -111,31 +97,25 @@ int Haming::caluclateParityBit(std::vector<int>& data)
 std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 {
 	std::vector<int> binaryNumber;
-	//
-	//
-	//introduceError(data);
-	//
 	receiverSteps.clear();
+	std::string decimalniBroj;
 	std::string str;
-	for (int i = 0, p = 1; i < parityBits; i++)   // proveravamo redudantne bitove
+	for (int i = 0, p = 1; i < parityBits; i++)
 	{
-		std::bitset<3> x(p);
-		std::vector<int> csb = checkSameBit(x, data, true);
-		int oneCounter = caluclateParityBit(csb);
-		str = "Za bit na poziciji " + std::to_string(p) + " se proverava da li je bit: "+ std::to_string(oneCounter);
-		receiverSteps.push_back(str);
-		if (oneCounter == 0 && data[p] != 0)
+		std::vector<int> csb = checkSameBit(p, data, false);
+
+		int parity = caluclateParityBit(csb) % 2;
+
+		decimalniBroj += char('0' + parity);
+
+		if(detectedError)
+		receiverSteps.push_back(
+			"R" + std::to_string(p) + " parity = " + std::to_string(parity));
+
+		if (parity == 1)
 			detectedError = true;
-		else if (oneCounter == 1 && data[p] != 1)
-			detectedError = true;
-		if (detectedError)
-		{
-			binaryNumber.insert(binaryNumber.begin(), oneCounter);
-		}
-		if (p == 1)
-			p++;
-		else
-			p *= 2;
+
+		p *= 2;
 	}
 
 	str.clear();
@@ -150,19 +130,22 @@ std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 	{
 		str = "Detektovana je greska!";
 		receiverSteps.push_back(str);
-		int decimalNumber = 0;
-		int size = binaryNumber.size();
+		std::reverse(decimalniBroj.begin(), decimalniBroj.end());
+		int pozicijaGreske = std::stoi(decimalniBroj, nullptr, 2);
+
+
 		str.clear();
-		for (int x : binaryNumber)
-			str += binaryNumber[x];
+		str = decimalniBroj + "(binarno)  :" + std::to_string(pozicijaGreske);
 		receiverSteps.push_back(str);
-		for (int i = 0, j = size-1 ; i < size ; i++, j--)
+		data[pozicijaGreske] ^= 1;
+		str = "Ispravljeni podatak: ";
+		receiverSteps.push_back(str);
+		str.clear();
+		for (int i = 1; i < data.size(); i++)
 		{
-			decimalNumber += binaryNumber[i] * pow(2, j);
+			str += std::to_string(data[i]);
 		}
-		str += "  :" + decimalNumber;
 		receiverSteps.push_back(str);
-		data[decimalNumber] ^= 1;
 	}
 
 	for (int i = 0, p= 1; i < parityBits; i++) // izbacivanje redudantnih 
@@ -182,6 +165,14 @@ std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 			i--;
 		}
 	}
+	str = "Originalni podatak: ";
+	receiverSteps.push_back(str);
+	str.clear();
+	for (int i = 1; i < data.size(); i++)
+	{
+		str += std::to_string(data[i]);
+	}
+	receiverSteps.push_back(str);
 	if (detectedError)
 		return { data, true };
 	else

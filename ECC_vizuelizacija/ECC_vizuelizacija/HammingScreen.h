@@ -12,7 +12,6 @@ public:
 	bool DrawScene();
 	bool isRadBtnActive();
 	bool test = false;
-	bool reset = false;
 	void ClearScene();
 	void DrawHammingScreen();
 	void CheckRadioButton();
@@ -21,15 +20,18 @@ public:
 	void DrawInfoText();
 
 	void DrawSenderInfo();
+	void DrawReceiverInfo();
 	void NacrtajEnkodiranje();
 	void NacrtajDekodiranje();
-
+	bool senderInfoBtn = false;
+	bool receiverInfoBtn = false;
 
 	int GetInputLength();
 private:
 	int errorPosition;
 	std::vector<std::string> infoTexts;
-	std::string SimulatedBits;
+	std::string SimulatedBitsString;
+	std::vector<int> SimulatedBits;
 	std::string Input;
 	std::string Received;
 	bool radBtn = false;

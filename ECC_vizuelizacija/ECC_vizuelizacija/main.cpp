@@ -70,7 +70,7 @@ int main()
             break;
         case Hamming:
             hs.DrawHammingScreen();
-            if (hs.test && hs.GetInputLength() >= 4 && !hs.reset)
+            if (hs.test && hs.GetInputLength() >= 4)
             {
                 hs.DrawScene();
             }
@@ -285,7 +285,6 @@ int main()
             if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
             {
                 hs.ClearScene();
-                hs.reset = true;
             }
             if (currentScreen == Hamming && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40 }, 10.0))
             {
@@ -303,7 +302,24 @@ int main()
             {
                 hs.CheckButton('-');
             }
-
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
+            {
+                hs.CheckButtonNext();
+            }
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
+            {
+                if (hs.senderInfoBtn)
+                    hs.senderInfoBtn = false;
+                else
+                    hs.senderInfoBtn = true;
+            }
+            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
+            {
+                if (hs.receiverInfoBtn)
+                    hs.receiverInfoBtn = false;
+                else
+                    hs.receiverInfoBtn = true;
+            }
 
 #pragma endregion Hamming
 #pragma region Parity

@@ -10,12 +10,12 @@ public:
 	int getParityBits(int n);
 	int caluclateParityBit(std::vector<int>& data);
 	std::pair<std::vector<int>, bool> receive(std::vector<int>& data);
-	std::vector<int> checkSameBit(std::bitset<3> i, std::vector<int>& data, bool receive);
+	std::vector<int> checkSameBit(std::bitset<4> i, std::vector<int>& data, bool receive);
 	std::pair<std::vector<int>, int> introduceError(std::vector<int>& data);
 	std::vector<std::string> getSenderSteps();
 	std::vector<std::string> getReceiverSteps();
 private:
-	std::pair<int, std::bitset<3>> decCode;
+	std::pair<int, std::bitset<4>> decCode;
 	bool detectedError = false;
 	int parityBits = 0;
 

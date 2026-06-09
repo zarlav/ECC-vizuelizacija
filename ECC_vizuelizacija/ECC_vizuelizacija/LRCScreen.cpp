@@ -20,8 +20,15 @@ void LRCScreen::ClearScene()
 	BaseScreen::xPos = w / 3 + 60;
 	BaseScreen::yPos = 80;
 
+	test = false;
+	generate = false;
+	senderInfoBtn = false;
+	receiverInfoBtn = false;
 	errorButtonApplied = false;
 	finished = false;
+	radBtn1 = false;
+	radBtn2 = false;
+	radBtn3 = false;
 	infoTexts.clear();
 	Input.clear();
 	Received.clear();
@@ -29,6 +36,14 @@ void LRCScreen::ClearScene()
 	simulatedData.clear();
 	receivedData.clear();
 	sentData.clear();
+
+	ColorRadBtn1 = GRAY;
+	ColorRadBtn2 = GRAY;
+	ColorRadBtn3 = GRAY;
+	bitOption8 = WHITE;
+	bitOption16 = WHITE;
+	bitOption32 = WHITE;
+	bitOption64 = WHITE;
 }
 
 void LRCScreen::DrawLRCScreen()
@@ -41,7 +56,7 @@ void LRCScreen::DrawLRCScreen()
 		generate = false;
 	}
 	int textWidth = MeasureText(Input.c_str(), 20);
-	DrawText("LRC", width / 2 - MeasureText("LRC", 40) / 2, 0, 40, GRAY);
+	DrawText("LRC", width / 2 - MeasureText("LRC", 40) / 2, 0, 40, NASLOV);
 	DrawScreen();
 	DrawCircle((width / 3.5) - 20, 40, 10, ColorRadBtn1);
 	DrawCircle((width / 3.5) - 20, 70, 10, ColorRadBtn2);

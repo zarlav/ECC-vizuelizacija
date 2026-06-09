@@ -15,7 +15,6 @@ public:
 	bool IsRadBtn2Active();
 	bool IsRadBtn3Active();
 	bool test = false;
-	bool reset = false;
 	bool generate = false;
 	bool senderInfoBtn = false;
 	bool receiverInfoBtn = false;
@@ -54,7 +53,6 @@ private:
 	bool radBtn3 = false;
 	bool finished;
 	bool errorButtonApplied = false;
-	bool error = false;
 	Color ColorRadBtn1 = GRAY;
 	Color ColorRadBtn2 = GRAY;
 	Color ColorRadBtn3 = GRAY;

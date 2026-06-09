@@ -23,7 +23,6 @@ public:
     bool finished;
     bool errorButtonApplied = false;
     bool test = false;
-    bool reset = false;
     int GetInputLength();
     int GetInfoTextLenght();
     bool senderInfoBtn = false;

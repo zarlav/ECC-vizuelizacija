@@ -94,8 +94,18 @@ void ParityScreen::ClearScene()
     errorButtonApplied = false;
     finished = false;
     error = false;
+    senderInfoBtn = false;
+    receiverInfoBtn = false;
+    test = false;
     infoTexts.clear();
     Input.clear();
+    SimulatedBits.clear();
+    ColorRadBtn1 = GRAY;
+    ColorRadBtn2 = GRAY;
+    ColorRadBtn3 = GRAY;
+    radBtn1 = false;
+    radBtn2 = false;
+    radBtn3 = false;
 }
 void ParityScreen::DrawParityScreen()
 {

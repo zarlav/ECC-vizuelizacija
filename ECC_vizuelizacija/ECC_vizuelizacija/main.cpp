@@ -63,7 +63,7 @@ int main()
             ps.DrawParityScreen();
             if (ps.GetInfoTextLenght()>0)
                 ps.DrawInfoText();
-            if (ps.test && ps.GetInputLength() >= 5 && !ps.reset)
+            if (ps.test && ps.GetInputLength() >= 5)
             {
                 ps.DrawScene();
             }
@@ -271,111 +271,114 @@ int main()
             }
 #pragma endregion LRC
 #pragma region Hamming
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
+            if (currentScreen == Hamming)
             {
-                if (hs.test)
-                    hs.test = false;
-                else
-                    hs.test = true;
-            }
-            if (currentScreen == Hamming && CheckCollisionPointCircle(mousePos, Vector2{ screenWidth / 3.5 - 20, 100.0 }, 10.0))
-            {
-                hs.CheckRadioButton();
-            }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
-            {
-                hs.ClearScene();
-            }
-            if (currentScreen == Hamming && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40 }, 10.0))
-            {
-                hs.CheckRadioButton();
-            }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
-            {
-                hs.CheckButton('0');
-            }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
-            {
-                hs.CheckButton('1');
-            }
-            if (currentScreen == Hamming && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
-            {
-                hs.CheckButton('-');
-            }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
-            {
-                hs.CheckButtonNext();
-            }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
-            {
-                if (hs.senderInfoBtn)
-                    hs.senderInfoBtn = false;
-                else
-                    hs.senderInfoBtn = true;
-            }
-            if (currentScreen == Hamming && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
-            {
-                if (hs.receiverInfoBtn)
-                    hs.receiverInfoBtn = false;
-                else
-                    hs.receiverInfoBtn = true;
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
+                {
+                    if (hs.test)
+                        hs.test = false;
+                    else
+                        hs.test = true;
+                }
+                if (CheckCollisionPointCircle(mousePos, Vector2{ screenWidth / 3.5 - 20, 100.0 }, 10.0))
+                {
+                    hs.CheckRadioButton();
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
+                {
+                    hs.ClearScene();
+                }
+                if (CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40 }, 10.0))
+                {
+                    hs.CheckRadioButton();
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
+                {
+                    hs.CheckButton('0');
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
+                {
+                    hs.CheckButton('1');
+                }
+                if (CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
+                {
+                    hs.CheckButton('-');
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
+                {
+                    hs.CheckButtonNext();
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
+                {
+                    if (hs.senderInfoBtn)
+                        hs.senderInfoBtn = false;
+                    else
+                        hs.senderInfoBtn = true;
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
+                {
+                    if (hs.receiverInfoBtn)
+                        hs.receiverInfoBtn = false;
+                    else
+                        hs.receiverInfoBtn = true;
+                }
             }
 
 #pragma endregion Hamming
 #pragma region Parity
-            if (currentScreen == Parity && CheckCollisionPointCircle(mousePos, Vector2{ screenWidth / 3.5 - 20, 100.0 }, 10.0))
+            if (currentScreen == Parity)
             {
-                ps.CheckRadioButton(ERROR_SIM);
-            }
-            if (currentScreen == Parity && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 70.0 }, 10.0))
-            {
-                ps.CheckRadioButton(ODD_PARITY);
-            }
-            if (currentScreen == Parity && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40.0 }, 10.0))
-            {
-                ps.CheckRadioButton(EVEN_PARITY);
-            }
-            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
-            {
-                ps.ClearScene();
-                ps.reset = true;
-            }
-            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
-            {
-                ps.CheckButton('0');
-            }
-            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
-            {
-                ps.CheckButton('1');
-            }
-            if (currentScreen == Parity && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
-            {
-                ps.CheckButton('-');
-            }
-            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
-            {
-                if (ps.IsRadBtn1Active() == true || ps.IsRadBtn2Active() == true)
+                if (CheckCollisionPointCircle(mousePos, Vector2{ screenWidth / 3.5 - 20, 100.0 }, 10.0))
                 {
-                    std::cout << "TEST";
-                    ps.test = true;
-                    ps.reset = false;
+                    ps.CheckRadioButton(ERROR_SIM);
                 }
-                else
-                    ps.test = false;
-            }
-            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
-            {
-                if (ps.senderInfoBtn)
-                    ps.senderInfoBtn = false;
-                else
-                    ps.senderInfoBtn = true;
-            }
-            if (currentScreen == Parity && CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
-            {
-                if (ps.receiverInfoBtn)
-                    ps.receiverInfoBtn = false;
-                else
-                    ps.receiverInfoBtn = true;
+                if (CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 70.0 }, 10.0))
+                {
+                    ps.CheckRadioButton(ODD_PARITY);
+                }
+                if (CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 40.0 }, 10.0))
+                {
+                    ps.CheckRadioButton(EVEN_PARITY);
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
+                {
+                    ps.ClearScene();
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
+                {
+                    ps.CheckButton('0');
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
+                {
+                    ps.CheckButton('1');
+                }
+                if (CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
+                {
+                    ps.CheckButton('-');
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
+                {
+                    if (ps.IsRadBtn1Active() == true || ps.IsRadBtn2Active() == true)
+                    {
+                        ps.test = true;
+                    }
+                    else
+                        ps.test = false;
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, 40 + 5, 20, 20 }))
+                {
+                    if (ps.senderInfoBtn)
+                        ps.senderInfoBtn = false;
+                    else
+                        ps.senderInfoBtn = true;
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ screenWidth / 3 + 120 - 25, screenHeight - screenHeight / 3 + 5, 20, 20 }))
+                {
+                    if (ps.receiverInfoBtn)
+                        ps.receiverInfoBtn = false;
+                    else
+                        ps.receiverInfoBtn = true;
+                }
             }
 #pragma endregion Parity
 #pragma region Golay

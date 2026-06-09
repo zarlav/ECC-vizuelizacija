@@ -269,12 +269,16 @@ void HammingScreen::NacrtajDekodiranje()
     int y = 60;
     int gap = 0;
     std::vector<std::string> steps = ham.getReceiverSteps();
+    std::string data;
     for (int i = 0; i < steps.size(); i++)
     {
         DrawTextEx(mono, steps[i].c_str(), { (float)x , (float)y + gap }, 25, 2, DARKGREEN);
         gap += 30;
     }
-    std::string data = steps[0];
+    if (error)
+        data = SimulatedBitsString;
+    else
+        data = steps[0];
     int cellSize = 25;
     int startX = GetScreenWidth() / 1.5;
     for (int r = 0; r < 4; r++)

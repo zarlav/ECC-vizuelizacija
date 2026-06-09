@@ -108,13 +108,12 @@ std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 
 		decimalniBroj += char('0' + parity);
 
-		if(detectedError)
-		receiverSteps.push_back(
-			"R" + std::to_string(p) + " parity = " + std::to_string(parity));
-
 		if (parity == 1)
 			detectedError = true;
 
+		if (detectedError)
+			receiverSteps.push_back(
+				"R" + std::to_string(p) + " parity = " + std::to_string(parity));
 		p *= 2;
 	}
 

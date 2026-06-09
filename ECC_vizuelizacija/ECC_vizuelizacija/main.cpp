@@ -376,55 +376,61 @@ int main()
             }
 #pragma endregion Parity
 #pragma region Golay
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
+            if (currentScreen == GOLAY)
             {
-                gscr.CheckButton('0');
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
-            {
-                gscr.CheckButton('1');
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
-            {
-                gscr.CheckButton('-');
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 100 }, 10.0))
-            {
-                gscr.CheckRadioButton();
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
-            {
-                if (gscr.test == false)
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 * 2 - 5, 140 + 5, 20, 20 }))
                 {
-                    gscr.test = true;
-                    //gscr.reset = false;
+                    gscr.CheckButton('0');
                 }
-                else
-                    gscr.test = false;
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 260, screenWidth / 3.5 - 80, 30 }))
-            {
-                gscr.CheckPrikazBtn(btnBC);
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 300, screenWidth / 3.5 - 80, 30 }))
-            {
-                gscr.CheckPrikazBtn(btnB);
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 340, screenWidth / 3.5 - 80, 30 }))
-            {
-                gscr.CheckPrikazBtn(btnG);
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 380, screenWidth / 3.5 - 80, 30 }))
-            {
-                gscr.CheckPrikazBtn(btnH);
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ 40, 420, screenWidth / 3.5 - 80, 30 }))
-            {
-                gscr.CheckPrikazBtn(btnV);
-            }
-            if (currentScreen == GOLAY && CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth()/2 , (float)GetScreenHeight() - 60 - 30, 200, 60}))
-            {
-                gscr.CheckPrikazBtn(btnNext);
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 2 + screenWidth / 3.5 - 5 - 20 - 2, 140 + 5, 20, 20 }))
+                {
+                    gscr.CheckButton('1');
+                }
+                if (CheckCollisionPointTriangle(mousePos, baseScreen.backSpacePositions[0], baseScreen.backSpacePositions[1], baseScreen.backSpacePositions[2]))
+                {
+                    gscr.CheckButton('-');
+                }
+                if (CheckCollisionPointCircle(mousePos, Vector2{ (screenWidth / 3.5) - 20, 100 }, 10.0))
+                {
+                    gscr.CheckRadioButton();
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 180, screenWidth / 3.5 - 80, 30 }))
+                {
+                    if (gscr.test == false)
+                    {
+                        gscr.test = true;
+                    }
+                    else
+                        gscr.test = false;
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 220, screenWidth / 3.5 - 80, 30 }))
+                {
+                    gscr.ClearScene();
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 260, screenWidth / 3.5 - 80, 30 }))
+                {
+                    gscr.CheckPrikazBtn(btnBC);
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 300, screenWidth / 3.5 - 80, 30 }))
+                {
+                    gscr.CheckPrikazBtn(btnB);
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 340, screenWidth / 3.5 - 80, 30 }))
+                {
+                    gscr.CheckPrikazBtn(btnG);
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 380, screenWidth / 3.5 - 80, 30 }))
+                {
+                    gscr.CheckPrikazBtn(btnH);
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ 40, 420, screenWidth / 3.5 - 80, 30 }))
+                {
+                    gscr.CheckPrikazBtn(btnV);
+                }
+                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
+                {
+                    gscr.CheckPrikazBtn(btnNext);
+                }
             }
 #pragma endregion Golay
         }

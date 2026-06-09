@@ -2,6 +2,8 @@
 #include <bitset>
 #include <string>
 #include <algorithm>
+#include <iostream>
+#include <random>
 
 Golay::Golay()
 {
@@ -192,6 +194,8 @@ std::bitset<24> Golay::korak3(std::bitset<12> syndrome)  // if wt(s+bi) <=2 -> u
 {
 	std::bitset<24> errorVector;
 
+	std::cout << " REZZZ 3: ";
+	std::cout << "ulaz: " << syndrome.to_string();
 	for (int i = 0; i < 12; i++)
 	{
 		std::bitset<12> redB;
@@ -200,20 +204,23 @@ std::bitset<24> Golay::korak3(std::bitset<12> syndrome)  // if wt(s+bi) <=2 -> u
 			redB[j] = podMatricaB[i][j];
 
 		std::bitset<12> temp = syndrome ^ redB;
-
 		if (temp.count() <= 2)
 		{
-			// leva polovina = syndrome + b_i
+			// leva polovina = s + b_i
 			for (int j = 0; j < 12; j++)
 				errorVector[j] = temp[j];
 
 			// desna polovina = e_i
 			errorVector[12 + i] = 1;
-			return errorVector;
+			std::cout << " REZZZ 3: ";
+			std::cout << errorVector.to_string();
+			rezKorak3 = errorVector;
+			return rezKorak3;
 		}
 	}
-	// nije pronadjeno resenje
-	return std::bitset<24>();
+	// nije pronadjeno resenje vraca sve jedinice
+	rezKorak3.set();
+	return rezKorak3;
 }
 
 std::bitset<12> Golay::izracunajDrugiSindrom(std::bitset<12> syndrome)
@@ -246,26 +253,29 @@ std::bitset<24> Golay::korak6(std::bitset<12> drugiSindrom)
 
 		if (temp.count() <= 2)
 		{
-			for (int j = 12; j < 24; j++)
-				errorVector[j] = temp[j];
+			// leva polovina = e_i
+			errorVector[i] = 1;
 
-			// leva polovina u[ei, sB+bi]
-			errorVector[0 + i] = 1;
-			return errorVector;
+			// desna polovina = drugiSindrom + b_i
+			for (int j = 0; j < 12; j++)
+				errorVector[12 + j] = temp[j];
+
+			rezKorak6 = errorVector;
+			return rezKorak6;
 		}
 	}
-	return std::bitset<24>();
+	rezKorak6 = rezKorak6.all();
+	return rezKorak6;
 }
 
-std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
+std::bitset<24> Golay::decode(std::bitset<24> received)
 {
-	success = false;
 
 	std::bitset<12> syndrome = izracunajSindrom(received);
 	std::string str;
 	std::bitset<24> rez;
 	DekodiranjeSteps.clear();
-	if (odrediTezinuSindroma(syndrome) <= 3)
+	if (odrediTezinuSindroma(syndrome) <= 3)  // korak2. if wt(s) <=3
 	{
 		std::bitset<24> errorVector = 0;
 		str.clear();
@@ -278,7 +288,6 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 		DekodiranjeSteps.push_back(str);
 		rez = received ^ errorVector;
 		DekodiranjeSteps.push_back(rez.to_string());
-		success = true;
 		return rez;
 	}
 
@@ -287,7 +296,7 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 	str = "Rezultat koraka 3: " + errorVector.to_string();
 	DekodiranjeSteps.push_back(str);
 
-	if (!errorVector.any())
+	if (errorVector.all()) // treci korak nije proso
 	{
 		std::bitset<12> drugiSindrom = izracunajDrugiSindrom(syndrome);
 		str.clear();
@@ -298,9 +307,8 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 			std::bitset<24> errorVector2 = 0;
 
 			for (int i = 0; i < 12; i++)
-				errorVector2[i] = drugiSindrom[i];
+				errorVector2[12 + i] = drugiSindrom[i];
 
-			success = true;
 			return received ^ errorVector2;
 		}
 
@@ -311,24 +319,31 @@ std::bitset<24> Golay::decode(std::bitset<24> received, bool& success)
 
 	if (!errorVector.any())
 	{
-		success = false;
 		return std::bitset<24>();
 	}
 
 	std::bitset<24> corrected = received ^ errorVector;
-
-	success = true;
+	std::cout << "[DEKODER] primljeno: ";
+	std::cout << received.to_string();
+	std::cout << "[DEKODER] ERROR VECTOR: ";
+	std::cout << errorVector.to_string();
+	std::cout << "[DEKODER] REZULTAT: ";
+	std::cout << corrected.to_string();
 	return corrected;
 }
 
-std::pair<std::bitset<24>, std::vector<int>>
-Golay::generisiGresku(std::bitset<24>& data, int brojGresaka)
+std::pair<std::bitset<24>, std::vector<int>> Golay::generisiGresku(std::bitset<24>& data, int brojGresaka)
 {
+	static std::random_device rd;
+	static std::mt19937 gen(rd());
+
 	std::vector<int> pozicije;
+
+	std::uniform_int_distribution<int> dist(0, 23);
 
 	while (pozicije.size() < brojGresaka)
 	{
-		int pozicija = rand() % 24;
+		int pozicija = dist(gen);
 
 		if (std::find(pozicije.begin(), pozicije.end(), pozicija) == pozicije.end())
 		{
@@ -388,5 +403,15 @@ std::bitset<11> Golay::VratiPolinomB()
 std::bitset<12> Golay::VratiPrviSindrom()
 {
 	return sindrom;
+}
+
+std::bitset<24> Golay::VratiKorak3()
+{
+	return rezKorak3;
+}
+
+std::bitset<24> Golay::VratiKorak6()
+{
+	return rezKorak6;
 }
 

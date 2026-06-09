@@ -18,7 +18,7 @@ public:
 	std::bitset<24> korak3(std::bitset<12> syndrome);
 	std::bitset<12> izracunajDrugiSindrom(std::bitset<12> syndrome); 
 	std::bitset<24> korak6(std::bitset<12> syndrome);
-	std::bitset<24> decode(std::bitset<24> received, bool& success);
+	std::bitset<24> decode(std::bitset<24> received);
 	std::pair< std::bitset<24>, std::vector<int>> generisiGresku(std::bitset<24>& data, int brojGresaka);
 
 	std::bitset<24> VratiVector();
@@ -33,6 +33,8 @@ public:
 
 	std::bitset<11> VratiPolinomB();
 	std::bitset<12> VratiPrviSindrom();
+	std::bitset<24> VratiKorak3();
+	std::bitset<24> VratiKorak6();
 private:
 	uint8_t ciklicnaMatrica[11][11] = { 0 };
 	uint8_t podMatricaB[12][12] = { 0 };
@@ -42,6 +44,9 @@ private:
 	std::vector<std::bitset<24>> codewords;
 	std::bitset<24>  vector;
 	std::bitset<11> polinomb;
+
+	std::bitset<24> rezKorak3;
+	std::bitset<24> rezKorak6;
 
 	std::vector<std::string> CiklicnaMatricaSteps;
 	std::vector<std::string> PodMatricaSteps;

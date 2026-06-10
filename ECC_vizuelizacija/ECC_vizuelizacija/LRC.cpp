@@ -62,13 +62,10 @@ int LRC::calculateParity(std::vector<int>& data)
 
 std::pair<std::vector<std::bitset<8>>, int> LRC::introduceError(std::vector<std::bitset<8>>&data)
 {
-	if (!data.empty())
-	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> distrib(0, data.size() - 2);
 		int rPos = distrib(gen);
 		data[rPos] ^= 1;
 		return { data, rPos };
-	}
 }

@@ -18,64 +18,61 @@ std::vector<int> CRC::send(std::vector<int>& data)
 
 std::vector<int> CRC::xorDivision(std::vector<int>& bits, bool sender)
 {
-	std::vector<int> deljenik;
-	std::vector<int> result;
-	int pos = generator.size();
-	deljenik.assign(bits.begin(), bits.begin() + generator.size());
-	steps.clear();
-	steps.push_back(BitUtils::BitsToString(bits));
-	steps.push_back(BitUtils::BitsToString(generator));
+    std::vector<int> work = bits;
+    steps.clear();
 
-	for (int i = 0; i < bits.size() - generator.size(); i++)
-	{
-		for (int j = 0; j < generator.size(); j++)
-		{
-			result.push_back(deljenik[j] ^ generator[j]);    //rezultat XOR-a
-		}
-		
-		steps.push_back(BitUtils::BitsToString(result));
-		if (result[0] == 0 && result[1] == 0)  // rezultat pocinje sa 2 nule
-		{
-			for (int p = 0; p < 2; p++)
-			{
-				if (p == 1)
-					steps.push_back(std::string(generator.size(), '0')); // nule
+    for (size_t i = 0; i <= work.size() - generator.size(); i++)
+    {
+        if (work[i] == 1)
+        {
+            std::vector<int> currentDividend(
+                work.begin() + i,
+                work.end());
 
-				result.erase(result.begin());
-				steps.push_back(BitUtils::BitsToString(result));  // brisanje nule
-				if (pos < bits.size())
-				{
-					result.push_back(bits[pos]);
-					pos++;
-				}
-				steps.push_back(BitUtils::BitsToString(result)); // spustanje sledeceg bita iz data
-			}
-			steps.push_back(BitUtils::BitsToString(generator));
-			i++;
-		}
-		//else if (steps[i][0] == '0' && steps[i].size() == getGeneratorSize() && steps[i].find('1') != std::string::npos)
-		//{
-		//	steps.push_back(std::string(generator.size(), '0'));
-		//}
-		else
-		{
-			result.erase(result.begin());
-			result.push_back(bits[pos]);
-			steps.push_back(BitUtils::BitsToString(result));
-			steps.push_back(BitUtils::BitsToString(generator));
-			pos++;
-		}
-		deljenik.assign(result.begin(), result.end());
-		result.clear();
-	}
-	result = deljenik;
-	result.erase(result.begin());
-	steps.push_back(BitUtils::BitsToString(result));
-	if (sender)
-		stepsSender = steps;
-	else
-		stepsReceiver = steps;
-	return result;
+            std::string dividendStr =
+                BitUtils::BitsToString(currentDividend);
+
+            std::string generatorStr =
+                BitUtils::BitsToString(generator);
+
+            steps.push_back(dividendStr);
+            steps.push_back(generatorStr);
+
+            steps.push_back(
+                std::string(generatorStr.size(), '-')
+            );
+
+            for (size_t j = 0; j < generator.size(); j++)
+                work[i + j] ^= generator[j];
+
+            std::vector<int> currentResult(
+                work.begin() + i,
+                work.end());
+
+            steps.push_back(
+                BitUtils::BitsToString(currentResult)
+            );
+
+            steps.push_back("");
+        }
+    }
+
+    std::vector<int> remainder(
+        work.end() - (generator.size() - 1),
+        work.end());
+
+    steps.push_back("CRC:");
+    //std::reverse(remainder.begin(), remainder.end());
+    steps.push_back(
+        BitUtils::BitsToString(remainder)
+    );
+
+    if (sender)
+        stepsSender = steps;
+    else
+        stepsReceiver = steps;
+
+    return remainder;
 }
 std::vector<std::string> CRC::getStepSender()
 {
@@ -108,13 +105,10 @@ CRCresult CRC::receive(std::vector<int>& bits)
 }
 std::pair<std::vector<int>, int> CRC::introduceError(std::vector<int>& data)
 {
-	if (!data.empty())
-	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> distrib(1, data.size() - 1);
-		int rPos = distrib(gen);
-		data[rPos] ^= 1;
-		return { data, rPos };
-	}
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(1, data.size() - 1);
+	int rPos = distrib(gen);
+	data[rPos] ^= 1;
+	return { data, rPos };
 }

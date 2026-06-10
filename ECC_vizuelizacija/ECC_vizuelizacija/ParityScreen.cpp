@@ -88,7 +88,7 @@ void ParityScreen::ClearScene()
     int h = GetScreenHeight();
     int w = GetScreenWidth();
 
-    xPos = w / 3 + 60;
+    xPos = w / 3.f + 60;
     yPos = 80;
 
     errorButtonApplied = false;

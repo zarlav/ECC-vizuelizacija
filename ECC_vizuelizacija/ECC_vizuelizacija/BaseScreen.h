@@ -16,18 +16,11 @@ public:
 
 	void DrawStaticScene();
 	void AnimateCode();
-	void ClearScene();
 
 	void DrawScreen();
 	void DrawInfoText();
 	void ShowSenderInfo(std::string info);
 	void ShowReceiverInfo(std::string info);
-
-	int GetInputLength() const;
-	bool errorButtonApplied = false;
-	bool test = false;
-	bool reset = false;
-	bool pause = false;
 
 	Vector2 backSpacePositions[3];
 	Vector2 navigateBackward[3];

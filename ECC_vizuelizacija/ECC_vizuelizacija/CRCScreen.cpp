@@ -19,11 +19,24 @@ void CRCscreen::ClearScene()
 	xPos = w / 3 + 60;
 	yPos = 80;
 
+	test = false;
+	receiverInfoBtn = false;
+	senderInfoBtn = false;
+	stepsDrawn = false;
 	errorButtonApplied = false;
 	finished = false;
 	canSend = false;
-	reset = false;
+	btnDalje = false;
 	Input.clear();
+	infoTexts.clear();
+	SimulatedBitsString.clear();
+	Received.clear();
+	RemainderSender.clear();
+	RemainderReceiver.clear();
+	SentData.clear();
+
+	ColorRadBtn = GRAY;
+
 }
 void CRCscreen::DrawCRCscreen()
 {
@@ -34,6 +47,13 @@ void CRCscreen::DrawCRCscreen()
 	DrawScreen();
 	DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn);
 	DrawText(Input.c_str(), 2 + (width / 3.5 - 5 - textWidth) / 2, 140 + (30 - 20) / 2, 20, BLACK);
+}
+void CRCscreen::CheckBtnDalje()
+{
+	if (btnDalje)
+		btnDalje = false;
+	else
+		btnDalje = true;
 }
 bool CRCscreen::isRadBtnActive()
 {
@@ -64,41 +84,46 @@ bool CRCscreen::DrawScene()
 		errorPosition = errorResult.second;
 		bits = errorResult.first;
 		bitsStr = BitUtils::BitsToString(bits);
-		SimulatedBits = bitsStr;
+		SimulatedBitsString = bitsStr;
+		SimulatedBits = bits;
 		errorButtonApplied = true;
 	}
 
-	if (errorButtonApplied)
+	if (errorButtonApplied && !finished)
 	{
-		for (int i = 0; i < SimulatedBits.size(); i++)
+		for (int i = 0; i < SimulatedBitsString.size(); i++)
 		{
 			if (i != errorPosition)
-				DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, BLACK);
+				DrawText(std::string(1, SimulatedBitsString[i]).c_str(), xPos + i * 12, yPos, 20, BLACK);
 			else
 			{
-				DrawText(std::string(1, SimulatedBits[i]).c_str(), xPos + i * 12, yPos, 20, RED);
+				DrawText(std::string(1, SimulatedBitsString[i]).c_str(), xPos + i * 12, yPos, 20, RED);
 			}
 		}
 	}
 	else
 	{
 		bitsStr = BitUtils::BitsToString(bits);
-		if (!bitsStr.empty())
+		if (!bitsStr.empty() && !finished)
 			DrawText(bitsStr.c_str(), xPos, yPos, 20, BLACK);
 	}
-//	DrawSendersSteps();
-	if (!finished)
+	if (!finished && btnDalje)
 	{
 		BaseScreen::AnimateCode();
 
 		if (yPos >= y2)
 		{
-			CRCresult res =	crc.receive(bits);
+			CRCresult res;
+			if (errorButtonApplied == true)
+			{
+				res = crc.receive(SimulatedBits);
+			}
+			else
+				res = crc.receive(bits);
 			bits = res.data;
 			bitsStr = BitUtils::BitsToString(bits);
 			Received = bitsStr;
 			error = res.error;
-			//RemainderReceiver = BitUtils::BitsToString(res.remainder);
 
 			finished = true;
 		}
@@ -132,171 +157,200 @@ void CRCscreen::CheckRadioButton()
 void CRCscreen::DrawSendersSteps()
 {
 	int screenWidth = GetScreenWidth();
-	int screenHeight = GetScreenHeight();
-	Vector2 size = MeasureTextEx(mono, "1", 20, 1);
-	int textWidth = size.x;
-	int textHeight = size.y;
-	int i = 1;
-	int gap = textHeight;
+
 	std::vector<std::string> stepsResult = crc.getStepSender();
-	DrawText("SENDER", screenWidth / 2.3f , 35, 25, DARKBLUE);
-	int y=0, x=0;
-	bool linija = false;
-	bool ostatakPrikaz = false;
-	if (!stepsResult.empty())
+
+	DrawText(
+		"SENDER",
+		screenWidth / 2.3f,
+		35,
+		25,
+		DARKBLUE
+	);
+
+	if (stepsResult.empty())
+		return;
+
+	static float timer = 0.0f;
+	static int visibleSteps = 1;
+	static float endTimer = 0.0f;
+
+	timer += GetFrameTime();
+
+	if (timer >= 1.0f)
 	{
-		static float timer = 0.0f;
-		static int visibleSteps = 2;
-		timer += GetFrameTime();
-		if (timer >= 1.0f)
-		{
-			timer = 0.0f;
-			if (visibleSteps < stepsResult.size())
-				visibleSteps++;
-		}
+		timer = 0.0f;
 
-		DrawTextEx(mono, stepsResult[0].c_str(), { (float)screenWidth / 2.3f, 60 }, 20,1, DARKBLUE);
-		gap += gap;
-		for (i = 1; i < visibleSteps; i++)
-		{
-			if (i >= 2)
-			{
-				if ( (stepsResult[i - 1][0] == '0' && stepsResult[i].size() == crc.getGeneratorSize() - 1) 
-					|| (linija && stepsResult[i-1][0] == '0')) // ovde se proverava kad treba da se shiftuje udesno 
-				{
-					bool vratiX = false;
-					x += textWidth + 2;
-					if (linija && stepsResult[i].size() == crc.getGeneratorSize())
-					{
-						x -= textWidth + 2;
-						vratiX = true;
-					}
-					Vector2 size = MeasureTextEx(mono, stepsResult[i].c_str(), 20, 1);
-					Vector2 start = { (float)screenWidth / 2.3f + x, (float)60 + y };
-					Vector2 end = { start.x + size.x, start.y + size.y };
-						DrawLine(
-							end.x,
-							end.y + textHeight,
-							end.x,
-							60,
-							BLACK
-						);
-					if(vratiX)
-						x += textWidth + 2;
-					linija = false;
-
-				}
-			}
-			while (i != stepsResult.size() - 1 && stepsResult[i].size() < crc.getGeneratorSize())
-			{
-				y += 20;
-				DrawTextEx(mono, stepsResult[i].c_str(), { (float)screenWidth / 2.3f + x, (float)60 + y }, 20, 1, ORANGE);
-				gap += gap;
-				i++;
-			}
-			y += 20;
-			DrawTextEx(mono, stepsResult[i].c_str(), { (float)screenWidth / 2.3f + x, (float)60 + y }, 20,1, DARKBLUE);
-			gap += gap;
-			if (stepsResult[i].find_first_not_of('0') == std::string::npos || stepsResult[i] == BitUtils::BitsToString(crc.getGenerator()))
-			{
-				DrawLine(screenWidth / 2.3f + x, 60 + y + 20, screenWidth / 2.3f + textWidth*stepsResult[0].size(), 60 + y + 20, BLACK);
-				linija = true;
-			}
-		}
-		if (visibleSteps == stepsResult.size())
-			ostatakPrikaz = true;
+		if (visibleSteps < (int)stepsResult.size())
+			visibleSteps++;
 	}
-	if (ostatakPrikaz)
+
+	float startX = screenWidth / 2.3f;
+	float y = 70;
+
+	std::string generatorStr =
+		BitUtils::BitsToString(crc.getGenerator());
+
+	for (int i = 0; i < visibleSteps; i++)
 	{
-		static float endTimer = 0.0f;
+		const std::string& step = stepsResult[i];
+
+		// prazan red
+		if (step.empty())
+		{
+			y += 12;
+			continue;
+		}
+
+		// separator
+		if (step.find('-') != std::string::npos)
+		{
+			DrawLine(
+				startX,
+				y + 10,
+				startX + MeasureTextEx(
+					mono,
+					step.c_str(),
+					20,
+					1
+				).x,
+				y + 10,
+				BLACK
+			);
+
+			y += 20;
+			continue;
+		}
+
+		Color color = DARKBLUE;
+
+		// generator
+		if (step == generatorStr)
+			color = ORANGE;
+
+		// CRC oznaka
+		if (step == "CRC:")
+			color = RED;
+
+		// ostatak
+		if (i == (int)stepsResult.size() - 1)
+			color = DARKGREEN;
+
+		DrawTextEx(
+			mono,
+			step.c_str(),
+			{ startX, y },
+			20,
+			1,
+			color
+		);
+
+		y += 25;
+	}
+
+	if (visibleSteps >= (int)stepsResult.size())
+	{
+		endTimer += GetFrameTime();
+
+		if (endTimer >= 5.0f && btnDalje)
+		{
+			canSend = true;
+			RemainderSender = stepsResult.back();
+		}
+	}
+}
+void CRCscreen::DrawReceiversSteps()
+{
+	int screenWidth = GetScreenWidth();
+
+	std::vector<std::string> stepsResult = crc.getStepReceiver();
+
+	DrawText(
+		"RECEIVER",
+		screenWidth / 1.6f,
+		35,
+		25,
+		GREEN
+	);
+
+	if (stepsResult.empty())
+		return;
+
+	static float timer = 0.0f;
+	static int visibleSteps = 1;
+	static float endTimer = 0.0f;
+
+	timer += GetFrameTime();
+
+	if (timer >= 1.0f)
+	{
+		timer = 0.0f;
+
+		if (visibleSteps < (int)stepsResult.size())
+			visibleSteps++;
+	}
+
+	float startX = screenWidth / 1.6f;
+	float y = 60;
+
+	std::string generatorStr =
+		BitUtils::BitsToString(crc.getGenerator());
+
+	for (int i = 0; i < visibleSteps; i++)
+	{
+		const std::string& step = stepsResult[i];
+
+		if (step.empty())
+		{
+			y += 10;
+			continue;
+		}
+
+		Color color = GREEN;
+
+		if (step == generatorStr)
+			color = ORANGE;
+
+		if (step.find('-') != std::string::npos)
+		{
+			DrawLine(
+				startX,
+				y + 10,
+				startX + MeasureTextEx(mono, step.c_str(), 20, 1).x,
+				y + 10,
+				BLACK
+			);
+
+			y += 20;
+			continue;
+		}
+
+		if (step == "CRC:")
+			color = RED;
+
+		if (i == (int)stepsResult.size() - 1)
+			color = DARKGREEN;
+
+		DrawTextEx(
+			mono,
+			step.c_str(),
+			{ startX, y },
+			20,
+			1,
+			color
+		);
+
+		y += 25;
+	}
+
+	if (visibleSteps >= (int)stepsResult.size())
+	{
 		endTimer += GetFrameTime();
 
 		if (endTimer >= 5.0f)
 		{
-			canSend = true;  // da bi se iscrtala scena sender->receiver
-			RemainderSender = stepsResult[stepsResult.size() - 1];
-			return;
+			RemainderReceiver = stepsResult.back();
 		}
-	}
-
-}
-void CRCscreen::DrawReceiversSteps()
-{
-	int cnt = 2;
-	int screenWidth = GetScreenWidth();
-	int screenHeight = GetScreenHeight();
-	Vector2 size = MeasureTextEx(mono, "1", 20, 1);
-	int textWidth = size.x;
-	int textHeight = size.y;
-	std::vector<std::string> stepsResult = crc.getStepReceiver();
-	DrawText("RECEIVER", screenWidth / 1.6f, 35, 25, GREEN);
-	int y = 0, x = 0;
-	int gap = textHeight;
-	bool linija = false;
-
-	if (!stepsResult.empty())
-	{
-		static float timer = 0.0f;
-		static int visibleSteps = 1.5;
-		timer += GetFrameTime();
-		if (timer >= 1.5f)
-		{
-			timer = 0.0f;
-			if (visibleSteps < stepsResult.size())
-				visibleSteps++;
-		}
-		DrawTextEx(mono, stepsResult[0].c_str(), { (float)screenWidth / 1.6f, 60 }, 20, 1, GREEN);
-		gap += gap; //
-		for (int i = 1; i < visibleSteps; i++)
-		{
-			if (i >= 2)
-			{
-				if ((stepsResult[i - 1][0] == '0' && stepsResult[i].size() == crc.getGeneratorSize() - 1)
-					|| (linija && stepsResult[i - 1][0] == '0')) // ovde se proverava kad treba da se shiftuje udesno 
-				{
-					bool vratiX = false;
-					x += textWidth + 2;
-					if (linija && stepsResult[i].size() == crc.getGeneratorSize())
-					{
-						x -= textWidth + 2;
-						vratiX = true;
-					}
-					Vector2 size = MeasureTextEx(mono, stepsResult[i].c_str(), 20, 1);
-					Vector2 start = { (float)screenWidth / 1.6f + x, (float)60 + y };
-					Vector2 end = { start.x + size.x, start.y + size.y };
-					DrawLine(
-						end.x,
-						end.y + textHeight,
-						end.x,
-						60,
-						BLACK
-					);
-					if (vratiX)
-						x += textWidth + 2;
-					linija = false;
-
-				}
-			}
-			while (i != stepsResult.size() - 1 && stepsResult[i].size() < crc.getGeneratorSize())
-			{
-				y += 20;
-				DrawTextEx(mono, stepsResult[i].c_str(), { (float)screenWidth / 1.6f+x, (float)60+y }, 20, 1, ORANGE);
-				gap += gap;
-				i++;
-			}
-			y += 20;
-			DrawTextEx(mono, stepsResult[i].c_str(), { (float)screenWidth / 1.6f + x, (float)60+y }, 20, 1, GREEN);
-			gap += gap;
-			if (stepsResult[i].find_first_not_of('0') == std::string::npos || stepsResult[i] == BitUtils::BitsToString(crc.getGenerator()))
-			{
-				if(!linija)
-					DrawLine(screenWidth / 1.6f + x, 60 + y + 20, screenWidth / 1.6f + textWidth * stepsResult[0].size(), 60 + y + 20, BLACK);
-				linija = true;
-			}
-
-		}
-		if (visibleSteps == stepsResult.size())
-			RemainderReceiver = stepsResult[stepsResult.size() - 1];
 	}
 }
 
@@ -323,7 +377,10 @@ void CRCscreen::DrawReceiverInfo()
 	ShowReceiverInfo(inf);
 }
 
-
+int CRCscreen::GetInputLength()
+{
+	return Input.size();
+}
 void CRCscreen::CheckButton(char bit)
 {
 	if (bit == '1' || bit == '0')

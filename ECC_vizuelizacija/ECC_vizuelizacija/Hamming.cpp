@@ -180,15 +180,12 @@ std::pair<std::vector<int>, bool > Haming::receive(std::vector<int>& data)
 
 std::pair<std::vector<int>, int> Haming::introduceError(std::vector<int>& data)
 {
-	if (!data.empty())
-	{
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> distrib(1, data.size() - 1);
-		int rPos = distrib(gen);
-		data[rPos] ^= 1;
-		return { data, rPos };
-	}
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> distrib(1, data.size() - 1);
+	int rPos = distrib(gen);
+	data[rPos] ^= 1;
+	return { data, rPos };
 }
 
 std::vector<std::string> Haming::getSenderSteps()

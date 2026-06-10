@@ -321,7 +321,7 @@ void GolayScreen::NacrtajCiklicnuMatricu()
 
 	Vector2 size = MeasureTextEx(mono, "1", 25, 2);
 
-	int y = 0;
+	float y = 0.0f;
 
 	std::vector<std::string> ciklicnaMatricaSteps; 
 	ciklicnaMatricaSteps = golay.VratiCiklicnaMatricaSteps();
@@ -369,7 +369,7 @@ void GolayScreen::NacrtajCiklicnuMatricu()
 				);
 			}
 
-			y += size.y;
+			y += (float)size.y;
 		}
 
 		if (visibleSteps == ciklicnaMatricaSteps.size())
@@ -526,7 +526,7 @@ void GolayScreen::NacrtajParityCheckMatricu()
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();
 	Vector2 size = MeasureTextEx(mono, "1", 25, 2);
-	int y = 0;
+	float y = 0.0f;
 	std::vector<std::string> parityCheckMatricaSteps = golay.VratiParityCheckMatricuSteps();
 	DrawTextEx(mono, "Parity-check matrica", { (float)screenWidth / 1.8f, (float)40 }, 30, 2, DARKBLUE);
 	if (!parityCheckMatricaSteps.empty())
@@ -918,4 +918,9 @@ void GolayScreen::NacrtajKorakeDekodiranja()
 	x += 40;
 	std = "Korak 7: if u not yet determined then request\n retransmission";
 	DrawTextEx(mono, std.c_str(), { (float)GetScreenWidth() - xPos, (float)y + x }, 22, 1, boja);
+}
+
+int GolayScreen::GetInputLength()
+{
+	return Input.size();
 }

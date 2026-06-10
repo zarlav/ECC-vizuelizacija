@@ -32,6 +32,8 @@ public:
 	void NacrtajMinimiziranuMatricu();
 	void NacrtajKorakeDekodiranja();
 
+	int GetInputLength();
+
 	bool test = false;
 private:
 	std::string Input;
@@ -51,6 +53,7 @@ private:
 	bool vectorFinished = true;
 	bool decodeFinished = true;
 	bool prikaziDekodirano = false;
+	bool errorButtonApplied;
 
 	bool btnPrikaziBc = false;
 	bool btnPrikaziB = false;

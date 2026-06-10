@@ -5,7 +5,7 @@ struct CRCresult
 {
     std::vector<int> data;
     std::vector<int> remainder;
-    bool error;
+    bool error = false;
 };
 class CRC 
 {

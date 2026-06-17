@@ -17,6 +17,7 @@ public:
 	void DrawReceiversSteps();
 	void DrawSenderInfo();
 	void DrawReceiverInfo();
+	void DrawPolynomial();
 	int GetInputLength();
 	std::vector<int> prepareBits();
 	bool test = false;

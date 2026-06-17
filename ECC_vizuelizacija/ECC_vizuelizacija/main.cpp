@@ -77,7 +77,7 @@ int main()
             break;
         case Lrc:
             lrcs.DrawLRCScreen();
-            if (lrcs.test)
+            if (lrcs.test && (lrcs.GetInputLength()%8 == 0  && lrcs.GetInputLength()>0 ))
             {
                 lrcs.DrawScene();
             }
@@ -179,7 +179,7 @@ int main()
                     else
                         crcs.receiverInfoBtn = true;
                 }
-                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
+                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() - 250, (float)GetScreenHeight() - 60 - 30, 200, 60 }))
                 {
                     crcs.CheckBtnDalje();
                 }
@@ -302,7 +302,7 @@ int main()
                 {
                     hs.CheckButton('-');
                 }
-                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
+                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() - 250, (float)GetScreenHeight() - 60 - 30, 200, 60 }))
                 {
                     hs.CheckButtonNext();
                 }
@@ -431,10 +431,11 @@ int main()
                 {
                     gscr.CheckPrikazBtn(btnV);
                 }
-                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() / 2 , (float)GetScreenHeight() - 60 - 30, 200, 60 }))
+                if (CheckCollisionPointRec(mousePos, Rectangle{ (float)GetScreenWidth() - 250, (float)GetScreenHeight() - 60 - 30, 200, 60 }))
                 {
                     gscr.CheckPrikazBtn(btnNext);
                 }
+
             }
 #pragma endregion Golay
         }

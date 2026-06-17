@@ -30,9 +30,11 @@ bool ParityScreen::DrawScene()
     {
         transmittedBits = pb.send(bits, IsRadBtn1Active());
         bitsStr = BitUtils::BitsToString(transmittedBits);
-        SimulatedBits = bitsStr;
+        SentData = bitsStr;
+        SimulatedBits = SentData; 
     }
     BaseScreen::DrawStaticScene();
+    DrawSenderSteps();
 
     if (IsRadBtn3Active() && !errorButtonApplied && yPos >= (y2-y1)/2 && xPos >= (x2-x1)/2)
     {
@@ -69,7 +71,6 @@ bool ParityScreen::DrawScene()
             result = pb.receive(transmittedBits);
             bits = result.first;
             error = result.second;
-
             finished = true;
         }
     }
@@ -79,6 +80,7 @@ bool ParityScreen::DrawScene()
 	        DrawReceiverInfo();
         if (senderInfoBtn)
             DrawSenderInfo();
+        DrawReceiverSteps();
     }
 
     return finished;
@@ -237,6 +239,52 @@ void ParityScreen::DrawSenderInfo()
             inf += " Posto je broj jedinica neparan, na kraju podatka\n se dodaje parity bit 1\n";
 
     ShowSenderInfo(inf);
+}
+void ParityScreen::DrawSenderSteps()
+{
+    Color c = BLACK;
+    int gap = 0;
+    DrawText("SENDER", GetScreenWidth()/ 2, GetScreenHeight() / 5.5, 20, DARKBLUE);
+    for (int i = 0; i < SentData.size(); i++)
+    {
+        if (SentData[i] == '1')
+            c = BLUE;
+        else
+            c = BLACK;
+        if (i == SentData.size() - 1)
+            c = DARKGREEN;
+        DrawText(
+            std::string(1, SentData[i]).c_str(),
+            GetScreenWidth()/2 + gap,
+            GetScreenHeight()/4.8,
+            20,
+            c
+        );
+        gap += 20;
+    }
+}
+void ParityScreen::DrawReceiverSteps()
+{
+    Color c = BLACK;
+    int gap = 0;
+    DrawText("RECEIVER", GetScreenWidth() / 2, GetScreenHeight() / 2.2, 20, GREEN);
+    for (int i = 0; i < SimulatedBits.size(); i++)
+    {
+        if (SimulatedBits[i] == '1')
+            c = BLUE;
+        else
+            c = BLACK;
+        if (i == SimulatedBits.size() - 1)
+            c = DARKGREEN;
+        DrawText(
+            std::string(1, SimulatedBits[i]).c_str(),
+            GetScreenWidth() / 2 + gap,
+            GetScreenHeight() / 2,
+            20,
+            c
+        );
+        gap += 20;
+    }
 }
 void ParityScreen::DrawReceiverInfo()
 {

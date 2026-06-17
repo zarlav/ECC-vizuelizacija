@@ -19,6 +19,8 @@ public:
     bool IsRadBtn2Active() const;
     bool IsRadBtn3Active() const;
     void DrawSenderInfo();
+    void DrawSenderSteps();
+    void DrawReceiverSteps();
     void DrawReceiverInfo();
     bool finished;
     bool errorButtonApplied = false;
@@ -33,6 +35,7 @@ private:
     std::vector<std::string> infoTexts;
     std::string Input;
     std::string SimulatedBits;
+    std::string SentData;
     std::vector<int> transmittedBits;
     bool radBtn1 = false;
     bool radBtn2 = false;

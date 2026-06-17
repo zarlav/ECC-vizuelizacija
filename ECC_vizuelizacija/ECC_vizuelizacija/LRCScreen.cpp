@@ -373,6 +373,10 @@ void LRCScreen::DrawInfoText()
 		DrawText(last.c_str(), 5, 700, 20, DARKBLUE);
 	}
 }
+int LRCScreen::GetInputLength()
+{
+	return Input.length();
+}
 
 void LRCScreen::DrawSendersSteps()
 {

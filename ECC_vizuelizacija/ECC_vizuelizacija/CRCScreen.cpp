@@ -47,6 +47,7 @@ void CRCscreen::DrawCRCscreen()
 	DrawScreen();
 	DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn);
 	DrawText(Input.c_str(), 2 + (width / 3.5 - 5 - textWidth) / 2, 140 + (30 - 20) / 2, 20, BLACK);
+	DrawPolynomial();
 }
 void CRCscreen::CheckBtnDalje()
 {
@@ -198,7 +199,7 @@ void CRCscreen::DrawSendersSteps()
 		// prazan red
 		if (step.empty())
 		{
-			y += 12;
+			y += 8;
 			continue;
 		}
 
@@ -245,7 +246,7 @@ void CRCscreen::DrawSendersSteps()
 			color
 		);
 
-		y += 25;
+		y += 15;
 	}
 
 	if (visibleSteps >= (int)stepsResult.size())
@@ -302,7 +303,7 @@ void CRCscreen::DrawReceiversSteps()
 
 		if (step.empty())
 		{
-			y += 10;
+			y += 8;
 			continue;
 		}
 
@@ -340,7 +341,7 @@ void CRCscreen::DrawReceiversSteps()
 			color
 		);
 
-		y += 25;
+		y += 15;
 	}
 
 	if (visibleSteps >= (int)stepsResult.size())
@@ -377,6 +378,12 @@ void CRCscreen::DrawReceiverInfo()
 	ShowReceiverInfo(inf);
 }
 
+void CRCscreen::DrawPolynomial()
+{
+	DrawText("P(x) = x^32 + x^26 + x^23 + x^22 + ", 40 + (GetScreenWidth() / 3.5 - 80) / 2 - MeasureText("P(x) = x^32 + x^26 + x^23 + x^22 + ", 20) / 2, 260 + 20 / 2 - 10 / 2, 20, DARKBROWN);
+	DrawText("+ x^16 + x^12 + x^11 + x^10 + x^8 + ", 40 + (GetScreenWidth() / 3.5 - 80) / 2 - MeasureText("+ x^16 + x^12 + x^11 + x^10 + x^8 + ", 20) / 2, 300 + 20 / 2 - 10 / 2, 20, DARKBROWN);
+	DrawText("+ x^7 + x^5 + x^4 + x^2 + x^1 + 1", 40 + (GetScreenWidth() / 3.5 - 80) / 2 - MeasureText("+ x^7 + x^5 + x^4 + x^2 + x^1 + 1", 20) / 2, 340 + 20 / 2 - 10 / 2, 20, DARKBROWN);
+}
 int CRCscreen::GetInputLength()
 {
 	return Input.size();

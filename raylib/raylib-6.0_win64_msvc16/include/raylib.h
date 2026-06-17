@@ -172,7 +172,7 @@
 // Some Basic Colors
 // NOTE: Custom raylib color palette for amazing visuals on WHITE background
 #define NASLOV CLITERAL(Color) {46, 188, 219, 255}
-#define SVETLOZELENA CLITERAL(Color) {220, 252, 235, 250}
+#define SVETLOZELENA CLITERAL(Color) {220, 252, 235, 255}
 #define LIGHTGRAY  CLITERAL(Color){ 200, 200, 200, 255 }   // Light Gray
 #define GRAY       CLITERAL(Color){ 130, 130, 130, 255 }   // Gray
 #define DARKGRAY   CLITERAL(Color){ 80, 80, 80, 255 }      // Dark Gray

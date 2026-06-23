@@ -8,3 +8,5 @@ U project properties pritisnuti na C/C++, zatim promeniti Additional Include Dir
 Takodje je i ovde potrebno **promeniti putanju** na ....\raylib\raylib-6.0_win64_msvc16\lib  kao na slici:
 <img width="1567" height="675" alt="image" src="https://github.com/user-attachments/assets/4870fa03-edff-4c08-89df-125bbf69e298" />
 
+
+

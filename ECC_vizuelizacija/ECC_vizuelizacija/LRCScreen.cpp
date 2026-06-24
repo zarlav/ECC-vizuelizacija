@@ -56,7 +56,7 @@ void LRCScreen::DrawLRCScreen()
 		generate = false;
 	}
 	int textWidth = MeasureText(Input.c_str(), 20);
-	DrawText("LRC", width / 2 - MeasureText("LRC", 40) / 2, 0, 40, NASLOV);
+	DrawText("LRC", width / 2 - MeasureText("LRC", 40) / 2, 0, 40, MAROON);
 	DrawScreen();
 	DrawCircle((width / 3.5) - 20, 40, 10, ColorRadBtn1);
 	DrawCircle((width / 3.5) - 20, 70, 10, ColorRadBtn2);

@@ -102,13 +102,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Lazar\source\repos\ECC-vizuelizacija\raylib\raylib-6.0_win64_msvc16\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Cetvrta godina\MSOS\raylib-6.0_win64_msvc16\raylib-6.0_win64_msvc16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4244</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Lazar\source\repos\ECC-vizuelizacija\raylib\raylib-6.0_win64_msvc16\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Cetvrta godina\MSOS\raylib-6.0_win64_msvc16\raylib-6.0_win64_msvc16\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

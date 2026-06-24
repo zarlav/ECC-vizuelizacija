@@ -40,7 +40,7 @@ void HammingScreen::DrawHammingScreen()
     int width = GetScreenWidth();
     int height = GetScreenHeight();
     int textWidth = MeasureText(Input.c_str(), 20);
-    DrawText("Hamming code", width / 2 - MeasureText("Hamming code", 40) / 2, 0, 40, NASLOV);
+    DrawText("Hamming code", width / 2 - MeasureText("Hamming code", 40) / 2, 0, 40, MAROON);
     DrawScreen();
     DrawText(Input.c_str(), 2 + (width / 3.5 - 5 - textWidth) / 2, 140 + (30 - 20) / 2, 20, BLACK);
     DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn);

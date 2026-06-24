@@ -73,7 +73,7 @@ void BaseScreen::ShowSenderInfo(std::string info)
         float(width)- ((float)width / 3 + 125) - 20,
         340
     };
-    DrawRectangleRec(box, SVETLOZELENA);
+    DrawRectangleRec(box, BEIGE);
     DrawRectangleLinesEx(box, 2, DARKGREEN);
     DrawText("INFO", box.x + 10, box.y + 10, 24, DARKGREEN);
     DrawLine(
@@ -104,7 +104,7 @@ void BaseScreen::ShowReceiverInfo(std::string info)
         260
     };
 
-    DrawRectangleRec(box, SVETLOZELENA);
+    DrawRectangleRec(box, BEIGE);
     DrawRectangleLinesEx(box, 2, DARKGREEN);
     DrawText("INFO", box.x + 10, box.y + 10, 24, DARKGREEN);
     DrawLine(

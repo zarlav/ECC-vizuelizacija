@@ -44,7 +44,7 @@ void GolayScreen::DrawGolayScreen()
 	int width = GetScreenWidth();
 	int height = GetScreenHeight();
 	int textWidth = MeasureText(Input.c_str(), 20);
-	DrawText("Golay [24,12,8]", width / 2 - MeasureText("Golay [24,12,8]", 40) / 2, 0, 40, NASLOV);
+	DrawText("Golay [24,12,8]", width / 2 - MeasureText("Golay [24,12,8]", 40) / 2, 0, 40, MAROON);
 	DrawScreen();
 	DrawCircle((width / 3.5) - 20, 100, 10, ColorRadBtn);
 	DrawText(Input.c_str(), 2 + (width / 3.5 - 5 - textWidth) / 2, 140 + (30 - 20) / 2, 20, BLACK);
